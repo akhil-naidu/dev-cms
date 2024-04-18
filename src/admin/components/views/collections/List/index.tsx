@@ -1,5 +1,7 @@
+import DefaultList from './Default'
+
 const ListView: React.FC = () => {
-  return <div>ListView</div>
+  return <DefaultList />
 }
 
 export default ListView
