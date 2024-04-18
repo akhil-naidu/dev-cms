@@ -26,6 +26,6 @@ const contentTypeConfig = {
       required: true,
     },
   ],
-};
+}
 
-export default contentTypeConfig;
+export default contentTypeConfig
