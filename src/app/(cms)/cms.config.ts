@@ -1,4 +1,5 @@
 const contentTypeConfig = {
+  slug: 'blog',
   label: 'Blog Post',
   fields: [
     {
