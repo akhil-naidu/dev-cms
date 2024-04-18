@@ -1,22 +1,5 @@
 {
-  "cSpell.words": [
-    "cmds",
-    "cql",
-    "css",
-    "fontsource",
-    "healthcheck",
-    "hookform",
-    "nextjs",
-    "nixpacks",
-    "nouance",
-    "payloadcms",
-    "paystack",
-    "scss",
-    "skipcq",
-    "tanstack",
-    "trpc",
-    "zoomin"
-  ],
+  "cSpell.words": [],
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit",
     "source.fixAll.eslint": "explicit"
