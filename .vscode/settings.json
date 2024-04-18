@@ -1,5 +1,13 @@
 {
-  "cSpell.words": [],
+  "cSpell.words": [
+    "clsx",
+    "cmdk",
+    "embla",
+    "hookform",
+    "sonner",
+    "trivago",
+    "vaul"
+  ],
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit",
     "source.fixAll.eslint": "explicit"
