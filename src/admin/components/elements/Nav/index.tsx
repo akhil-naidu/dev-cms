@@ -1,3 +1,5 @@
+'use client'
+
 import {
   BellIcon,
   HomeIcon,
@@ -7,9 +9,10 @@ import {
   ShoppingCartIcon,
   UsersIcon,
 } from '../../icons'
+import NoCollections from '../EmptyStates/NoCollections'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -19,7 +22,12 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-const DefaultNav = () => {
+import { NavLink, Props } from './types'
+
+const DefaultNav: React.FC<Props> = props => {
+  const pathname = usePathname()
+  const { navLinks } = props
+
   return (
     // skipcq: JS-0415
     <div className='hidden border-r bg-muted/40 md:block'>
@@ -36,44 +44,19 @@ const DefaultNav = () => {
         </div>
         <div className='flex-1'>
           <nav className='grid items-start px-2 text-sm font-medium lg:px-4'>
-            <Link
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-              href='#'
-            >
-              <HomeIcon className='h-4 w-4' />
-              Dashboard
-            </Link>
-            <Link
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-              href='#'
-            >
-              <ShoppingCartIcon className='h-4 w-4' />
-              Orders
-              <Badge className='ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full'>
-                6
-              </Badge>
-            </Link>
-            <Link
-              className='flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary'
-              href='#'
-            >
-              <PackageIcon className='h-4 w-4' />
-              Products
-            </Link>
-            <Link
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-              href='#'
-            >
-              <UsersIcon className='h-4 w-4' />
-              Customers
-            </Link>
-            <Link
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-              href='#'
-            >
-              <LineChartIcon className='h-4 w-4' />
-              Analytics
-            </Link>
+            {navLinks?.map(({ label, url, icon }: NavLink) => {
+              const isActive = pathname === url
+              const linkClassNames = isActive
+                ? 'flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary'
+                : 'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
+
+              return (
+                <Link key={url} className={linkClassNames} href={url}>
+                  {icon}
+                  {label}
+                </Link>
+              )
+            })}
           </nav>
         </div>
         <div className='mt-auto p-4'>
@@ -98,7 +81,39 @@ const DefaultNav = () => {
 }
 
 const Nav = () => {
-  return <DefaultNav />
+  const navLinks = [
+    {
+      label: 'Home',
+      url: '/admin/collections/home',
+      icon: <HomeIcon className='h-4 w-4' />,
+    },
+    {
+      label: 'Orders',
+      url: '/admin/collections/orders',
+      icon: <ShoppingCartIcon className='h-4 w-4' />,
+    },
+    {
+      label: 'Products',
+      url: '/admin/collections/products',
+      icon: <PackageIcon className='h-4 w-4' />,
+    },
+    {
+      label: 'Customers',
+      url: '/admin/collections/customers',
+      icon: <UsersIcon className='h-4 w-4' />,
+    },
+    {
+      label: 'Analytics',
+      url: '/admin/collections/analytics',
+      icon: <LineChartIcon className='h-4 w-4' />,
+    },
+  ]
+
+  return navLinks.length ? (
+    <DefaultNav navLinks={navLinks} />
+  ) : (
+    <NoCollections />
+  )
 }
 
 export default Nav
