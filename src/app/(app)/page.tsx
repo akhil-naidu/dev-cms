@@ -1,8 +1,7 @@
 // pages/index.js
+import Head from 'next/head'
 
-import DynamicForm from '@/components/DynamicForm';
-
-import Head from 'next/head';
+import DynamicForm from '@/components/DynamicForm'
 
 export default function Home() {
   return (
@@ -19,5 +18,5 @@ export default function Home() {
 
       <footer>{/* Footer content */}</footer>
     </div>
-  );
+  )
 }
