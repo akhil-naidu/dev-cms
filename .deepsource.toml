@@ -6,7 +6,7 @@ exclude_patterns = [
   ".vscode",
   "build",
   "dist",
-  "src/components/ui"
+  "src/components/ui/**"
 ]
 
 [[analyzers]]
