@@ -1,4 +1,4 @@
-import Nav from '../../elements/Nav'
+import Nav from '@/admin/components/elements/Nav'
 
 import { Props } from './types'
 

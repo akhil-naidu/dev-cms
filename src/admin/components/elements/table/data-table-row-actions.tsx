@@ -1,9 +1,9 @@
 'use client'
 
-import { labels } from '../../../data/table/data'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Row } from '@tanstack/react-table'
 
+import { labels } from '@/admin/data/table/data'
 import { TableItem } from '@/admin/data/table/types'
 import { Button } from '@/components/ui/button'
 import {

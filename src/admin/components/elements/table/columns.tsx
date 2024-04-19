@@ -1,9 +1,9 @@
 'use client'
 
-import { labels, priorities, statuses } from '../../../data/table/data'
 import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 
+import { labels, priorities, statuses } from '@/admin/data/table/data'
 import { TableItem } from '@/admin/data/table/types'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'

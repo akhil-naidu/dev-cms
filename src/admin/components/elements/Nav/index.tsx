@@ -1,8 +1,8 @@
 'use client'
 
-import { BellIcon, Package2Icon } from '../../icons'
 import Link from 'next/link'
 
+import { BellIcon, Package2Icon } from '@/admin/components/icons'
 import { collections } from '@/admin/data/collections'
 import { Collections } from '@/admin/data/collections/types'
 import { Button } from '@/components/ui/button'
