@@ -1,17 +1,10 @@
-import Link from 'next/link'
+'use client'
 
-import {
-  HomeIcon,
-  LineChartIcon,
-  MenuIcon,
-  Package2Icon,
-  PackageIcon,
-  SearchIcon,
-  ShoppingCartIcon,
-  UserCircleIcon,
-  UsersIcon,
-} from '@/admin/components/icons'
-import { Badge } from '@/components/ui/badge'
+import NavLinks from '../Nav/NavLinks'
+
+import { MenuIcon, SearchIcon, UserCircleIcon } from '@/admin/components/icons'
+import { collections } from '@/admin/data/collections'
+import { Collections } from '@/admin/data/collections/types'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -31,7 +24,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
-const DefaultHeader: React.FC = () => {
+import { Props } from './types'
+
+const DefaultHeader: React.FC<Props> = props => {
+  const { navLinks } = props
+
   return (
     // skipcq: JS-0415
     <header className='flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6'>
@@ -43,53 +40,7 @@ const DefaultHeader: React.FC = () => {
           </Button>
         </SheetTrigger>
         <SheetContent className='flex flex-col' side='left'>
-          <nav className='grid gap-2 text-lg font-medium'>
-            <Link
-              className='flex items-center gap-2 text-lg font-semibold'
-              href='#'
-            >
-              <Package2Icon className='h-6 w-6' />
-              <span className='sr-only'>Acme Inc</span>
-            </Link>
-            <Link
-              className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
-              href='#'
-            >
-              <HomeIcon className='h-5 w-5' />
-              Dashboard
-            </Link>
-            <Link
-              className='mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground'
-              href='#'
-            >
-              <ShoppingCartIcon className='h-5 w-5' />
-              Orders
-              <Badge className='ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full'>
-                6
-              </Badge>
-            </Link>
-            <Link
-              className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
-              href='#'
-            >
-              <PackageIcon className='h-5 w-5' />
-              Products
-            </Link>
-            <Link
-              className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
-              href='#'
-            >
-              <UsersIcon className='h-5 w-5' />
-              Customers
-            </Link>
-            <Link
-              className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
-              href='#'
-            >
-              <LineChartIcon className='h-5 w-5' />
-              Analytics
-            </Link>
-          </nav>
+          <NavLinks navLinks={navLinks} />
           <div className='mt-auto'>
             <Card>
               <CardHeader>
@@ -141,7 +92,7 @@ const DefaultHeader: React.FC = () => {
 }
 
 const Header: React.FC = () => {
-  return <DefaultHeader />
+  return <DefaultHeader navLinks={collections as Collections} />
 }
 
 export default Header
