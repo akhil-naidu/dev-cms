@@ -1,7 +1,6 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import Link from 'next/link'
 
 import { labels, priorities, statuses } from '@/admin/data/table/data'
 import { TableItem } from '@/admin/data/table/types'
@@ -46,11 +45,7 @@ export const columns: ColumnDef<TableItem>[] = [
       <DataTableColumnHeader column={column} title='Task' />
     ),
     cell: ({ row }) => {
-      return (
-        <Link href={`${row.getValue('id')}`}>
-          <div className='w-[80px]'>{row.getValue('id')}</div>
-        </Link>
-      )
+      return <div className='w-[80px]'>{row.getValue('id')}</div>
     },
     enableSorting: false,
     enableHiding: false,
