@@ -1,7 +1,7 @@
-import ListView from '@/admin/components/views/collections/List'
+import DashboardView from '@/admin/components/views/Dashboard'
 
 const Admin: React.FC = () => {
-  return <ListView />
+  return <DashboardView />
 }
 
 export default Admin
