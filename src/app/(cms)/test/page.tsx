@@ -1,9 +1,9 @@
 'use client'
 
-import { api } from '../../../../convex/_generated/api'
 import { useMutation, usePaginatedQuery, useQuery } from 'convex/react'
 
 import { Button } from '@/components/ui/button'
+import { api } from '@/convex/_generated/api'
 
 export default function Home() {
   const todos = usePaginatedQuery(
