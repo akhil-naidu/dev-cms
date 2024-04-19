@@ -1,16 +1,16 @@
 'use client'
 
 import { labels, priorities, statuses } from '../../../data/table/data'
-import { Task } from '../../../data/table/schema'
 import { ColumnDef } from '@tanstack/react-table'
 
+import { TableItem } from '@/admin/data/table/types'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { DataTableColumnHeader } from './data-table-column-header'
 import { DataTableRowActions } from './data-table-row-actions'
 
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDef<TableItem>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -19,7 +19,10 @@ export const columns: ColumnDef<Task>[] = [
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
-        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+        // skipcq: JS-0417
+        onCheckedChange={value =>
+          table.toggleAllPageRowsSelected(Boolean(value))
+        }
         aria-label='Select all'
         className='translate-y-[2px]'
       />
@@ -27,7 +30,8 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={value => row.toggleSelected(!!value)}
+        // skipcq: JS-0417
+        onCheckedChange={value => row.toggleSelected(Boolean(value))}
         aria-label='Select row'
         className='translate-y-[2px]'
       />

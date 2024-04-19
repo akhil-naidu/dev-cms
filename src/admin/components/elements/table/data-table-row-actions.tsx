@@ -1,10 +1,10 @@
 'use client'
 
 import { labels } from '../../../data/table/data'
-import { taskSchema } from '../../../data/table/schema'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Row } from '@tanstack/react-table'
 
+import { TableItem } from '@/admin/data/table/types'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -27,9 +27,10 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const task = taskSchema.parse(row.original)
+  const task = row.original as TableItem
 
   return (
+    // skipcq: JS-0415
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button

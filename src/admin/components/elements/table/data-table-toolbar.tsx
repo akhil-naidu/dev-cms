@@ -25,6 +25,7 @@ export function DataTableToolbar<TData>({
         <Input
           placeholder='Filter tasks...'
           value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
+          // skipcq: JS-0417
           onChange={event =>
             table.getColumn('title')?.setFilterValue(event.target.value)
           }
@@ -47,6 +48,7 @@ export function DataTableToolbar<TData>({
         {isFiltered && (
           <Button
             variant='ghost'
+            // skipcq: JS-0417
             onClick={() => table.resetColumnFilters()}
             className='h-8 px-2 lg:px-3'>
             Reset

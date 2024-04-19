@@ -1,8 +1,9 @@
 'use client'
 
 import NavLinks from '../Nav/NavLinks'
+import { UserNav } from '../UserNav'
 
-import { MenuIcon, SearchIcon, UserCircleIcon } from '@/admin/components/icons'
+import { MenuIcon, SearchIcon } from '@/admin/components/icons'
 import { collections } from '@/admin/data/collections'
 import { Collections } from '@/admin/data/collections/types'
 import { Button } from '@/components/ui/button'
@@ -13,14 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
@@ -71,22 +64,9 @@ const DefaultHeader: React.FC<Props> = props => {
           </div>
         </form>
       </div>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button className='rounded-full' size='icon' variant='secondary'>
-            <UserCircleIcon className='h-5 w-5' />
-            <span className='sr-only'>Toggle user menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className='flex items-center space-x-2'>
+        <UserNav />
+      </div>
     </header>
   )
 }

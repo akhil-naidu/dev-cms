@@ -13,6 +13,7 @@ import {
 
 export function UserNav() {
   return (
+    // skipcq: JS-0415
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>

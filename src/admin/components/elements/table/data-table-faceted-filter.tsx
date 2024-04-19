@@ -1,6 +1,5 @@
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
 import { Column } from '@tanstack/react-table'
-import * as React from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -40,6 +39,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   const selectedValues = new Set(column?.getFilterValue() as string[])
 
   return (
+    // skipcq: JS-0415
     <Popover>
       <PopoverTrigger asChild>
         <Button variant='outline' size='sm' className='h-8 border-dashed'>
@@ -88,6 +88,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                 return (
                   <CommandItem
                     key={option.value}
+                    // skipcq: JS-0417
                     onSelect={() => {
                       if (isSelected) {
                         selectedValues.delete(option.value)
@@ -126,6 +127,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
+                    // skipcq: JS-0417
                     onSelect={() => column?.setFilterValue(undefined)}
                     className='justify-center text-center'>
                     Clear filters
