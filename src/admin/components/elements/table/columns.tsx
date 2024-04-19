@@ -34,6 +34,7 @@ export const columns: ColumnDef<TableItem>[] = [
         onCheckedChange={value => row.toggleSelected(Boolean(value))}
         aria-label='Select row'
         className='translate-y-[2px]'
+        // onClick={e => e.stopPropagation()}
       />
     ),
     enableSorting: false,

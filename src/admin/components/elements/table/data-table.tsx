@@ -14,6 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import {
@@ -62,6 +63,9 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
+  // custom code
+  const router = useRouter()
+  const pathname = usePathname()
 
   return (
     <div className='space-y-4'>
@@ -90,10 +94,25 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map(row => (
                 <TableRow
+                  // skipcq: JS-0336
+
+                  // style={{ cursor: 'pointer' }}
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      style={
+                        cell.id.endsWith('id') ? { cursor: 'pointer' } : {}
+                      }
+                      onClick={() => {
+                        if (cell.id.endsWith('id')) {
+                          return router.push(
+                            `${pathname}/${row.getValue('id')}`,
+                          )
+                        }
+                        return null
+                      }}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
