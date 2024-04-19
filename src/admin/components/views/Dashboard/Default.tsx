@@ -12,7 +12,7 @@ import {
 
 import { Props } from './types'
 
-const DefaultList: React.FC<Props> = props => {
+const Dashboard: React.FC<Props> = props => {
   const { collections } = props
 
   return (
@@ -43,4 +43,4 @@ const DefaultList: React.FC<Props> = props => {
   )
 }
 
-export default DefaultList
+export default Dashboard
