@@ -1,7 +1,8 @@
 export type CollectionItem = {
   slug: string
   label?: string
-  url?: string
+  description?: string
+  path?: string
   icon?: React.ReactNode
 }
 

@@ -1,35 +1,35 @@
 import {
-  HomeIcon,
   LineChartIcon,
   PackageIcon,
   ShoppingCartIcon,
   UsersIcon,
 } from '@/admin/components/icons'
 
-export const collections = [
+import { Collections } from './types'
+
+export const collections: Collections = [
   {
-    label: 'Home',
-    url: '/admin/collections/home',
-    icon: <HomeIcon className='h-4 w-4' />,
-  },
-  {
+    slug: 'orders',
     label: 'Orders',
-    url: '/admin/collections/orders',
+    path: '/admin/collections/orders',
     icon: <ShoppingCartIcon className='h-4 w-4' />,
   },
   {
+    slug: 'products',
     label: 'Products',
-    url: '/admin/collections/products',
+    path: '/admin/collections/products',
     icon: <PackageIcon className='h-4 w-4' />,
   },
   {
+    slug: 'customers',
     label: 'Customers',
-    url: '/admin/collections/customers',
+    path: '/admin/collections/customers',
     icon: <UsersIcon className='h-4 w-4' />,
   },
   {
+    slug: 'analytics',
     label: 'Analytics',
-    url: '/admin/collections/analytics',
+    path: '/admin/collections/analytics',
     icon: <LineChartIcon className='h-4 w-4' />,
   },
 ]

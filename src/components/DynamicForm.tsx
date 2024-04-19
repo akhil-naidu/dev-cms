@@ -18,8 +18,9 @@ const DynamicForm = () => {
   return (
     <div>
       <h1>{label} Form</h1>
-      {/* skipcq: JS-0417 */}
-      <form onSubmit={e => handleSubmit(e)}>
+      <form
+        // skipcq: JS-0417
+        onSubmit={e => handleSubmit(e)}>
         {fields.map(field => (
           <div key={field.name} className='flex items-center gap-4'>
             <Label htmlFor={field.name}>{field.label}</Label>
