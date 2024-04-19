@@ -1,9 +1,5 @@
-export type NavLink = {
-  label: string
-  url: string
-  icon?: React.ReactNode
-}
+import { Collections } from '@/admin/data/collections/types'
 
 export type Props = {
-  navLinks?: NavLink[]
+  navLinks?: Collections
 }

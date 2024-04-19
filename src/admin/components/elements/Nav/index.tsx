@@ -1,18 +1,11 @@
 'use client'
 
-import {
-  BellIcon,
-  HomeIcon,
-  LineChartIcon,
-  Package2Icon,
-  PackageIcon,
-  ShoppingCartIcon,
-  UsersIcon,
-} from '../../icons'
-import NoCollections from '../EmptyStates/NoCollections'
+import { BellIcon, Package2Icon } from '../../icons'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import { collections } from '@/admin/data/collections'
+import { CollectionItem, Collections } from '@/admin/data/collections/types'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -22,7 +15,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-import { NavLink, Props } from './types'
+import { Props } from './types'
 
 const DefaultNav: React.FC<Props> = props => {
   const pathname = usePathname()
@@ -44,14 +37,20 @@ const DefaultNav: React.FC<Props> = props => {
         </div>
         <div className='flex-1'>
           <nav className='grid items-start px-2 text-sm font-medium lg:px-4'>
-            {navLinks?.map(({ label, url, icon }: NavLink) => {
+            {!navLinks?.length && (
+              <h3 className='place-self-center pt-5'>No Collections</h3>
+            )}
+            {navLinks?.map(({ slug, label, url, icon }: CollectionItem) => {
               const isActive = pathname === url
               const linkClassNames = isActive
                 ? 'flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary'
                 : 'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
 
               return (
-                <Link key={url} className={linkClassNames} href={url}>
+                <Link
+                  key={url}
+                  className={linkClassNames}
+                  href={url || `/admin/collections/${slug}`}>
                   {icon}
                   {label}
                 </Link>
@@ -81,39 +80,7 @@ const DefaultNav: React.FC<Props> = props => {
 }
 
 const Nav = () => {
-  const navLinks = [
-    {
-      label: 'Home',
-      url: '/admin/collections/home',
-      icon: <HomeIcon className='h-4 w-4' />,
-    },
-    {
-      label: 'Orders',
-      url: '/admin/collections/orders',
-      icon: <ShoppingCartIcon className='h-4 w-4' />,
-    },
-    {
-      label: 'Products',
-      url: '/admin/collections/products',
-      icon: <PackageIcon className='h-4 w-4' />,
-    },
-    {
-      label: 'Customers',
-      url: '/admin/collections/customers',
-      icon: <UsersIcon className='h-4 w-4' />,
-    },
-    {
-      label: 'Analytics',
-      url: '/admin/collections/analytics',
-      icon: <LineChartIcon className='h-4 w-4' />,
-    },
-  ]
-
-  return navLinks.length ? (
-    <DefaultNav navLinks={navLinks} />
-  ) : (
-    <NoCollections />
-  )
+  return <DefaultNav navLinks={collections as Collections} />
 }
 
 export default Nav
