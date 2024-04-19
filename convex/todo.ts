@@ -3,7 +3,7 @@ import { boolean, string } from 'convex-helpers/validators'
 
 import { mutation, query } from './_generated/server'
 
-const Todo = Table('todo', {
+export const Todo = Table('todo', {
   task: string,
   completed: boolean,
 })

@@ -29,7 +29,7 @@ export default function Home() {
         <Button
           onClick={() =>
             updateTodo({
-              id: todos.results.at(-1)._id,
+              id: todos?.results.at(-1)?._id!,
               patch: { task: 'updated todo name' },
             })
           }>
