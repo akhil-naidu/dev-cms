@@ -1,9 +1,9 @@
 import Header from '@/admin/components/elements/Header'
-import { columns } from '@/admin/components/elements/table/columns'
-import { DataTable } from '@/admin/components/elements/table/data-table'
+import { columns } from '@/admin/components/elements/Table/columns'
+import { DataTable } from '@/admin/components/elements/Table/data-table'
 import { tableData } from '@/admin/data/table/tasks'
 
-const TaskPage = () => {
+const Page = () => {
   const tasks = tableData
 
   return (
@@ -25,4 +25,4 @@ const TaskPage = () => {
   )
 }
 
-export default TaskPage
+export default Page

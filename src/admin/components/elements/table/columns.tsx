@@ -2,6 +2,7 @@
 
 import { labels, priorities, statuses } from '../../../data/table/data'
 import { ColumnDef } from '@tanstack/react-table'
+import Link from 'next/link'
 
 import { TableItem } from '@/admin/data/table/types'
 import { Badge } from '@/components/ui/badge'
@@ -44,7 +45,13 @@ export const columns: ColumnDef<TableItem>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Task' />
     ),
-    cell: ({ row }) => <div className='w-[80px]'>{row.getValue('id')}</div>,
+    cell: ({ row }) => {
+      return (
+        <Link href={`${row.getValue('id')}`}>
+          <div className='w-[80px]'>{row.getValue('id')}</div>
+        </Link>
+      )
+    },
     enableSorting: false,
     enableHiding: false,
   },
