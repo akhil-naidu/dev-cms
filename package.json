@@ -60,7 +60,10 @@
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "@trigger.dev/sdk": "^2.3.18",
+    "@trigger.dev/nextjs": "^2.3.18",
+    "@trigger.dev/react": "^2.3.18"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
@@ -73,5 +76,8 @@
     "prettier": "3.2.5",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "trigger.dev": {
+    "endpointId": "dev-cms-YqlQ"
   }
 }
