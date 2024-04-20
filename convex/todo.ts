@@ -13,3 +13,12 @@ export const { create, read, paginate, update, destroy } = crud(
   query,
   mutation,
 )
+
+/*
+  Issues in using the crud function:
+  1. crud function creates only api endpoints, we can't add session storage for it
+  2. using crud we will not have the ability to use the any of the indexes we create
+
+  When to use this crud function
+  1. If we are creating any internal functions, which we will not expose to the client
+*/
