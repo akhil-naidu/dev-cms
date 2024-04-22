@@ -1,20 +1,25 @@
-import { Table, crud } from 'convex-helpers/server'
-import { zodToConvexFields } from 'convex-helpers/server/zod'
-import { enum as z_enum, string as z_string } from 'zod'
+import { Table, crud } from 'convex-helpers/server';
+import { zodToConvexFields } from 'convex-helpers/server/zod';
+import { enum as z_enum, string as z_string } from 'zod';
 
-import { mutation, query } from './_generated/server'
 
-export const Todo_Schema = {
+
+import { mutation, query } from './_generated/server';
+
+
+export const Task_Schema = {
   title: z_string(),
   status: z_enum(['canceled', 'backlog', 'todo', 'in progress', 'done']),
   label: z_enum(['bug', 'feature', 'documentation']).optional(),
   priority: z_enum(['low', 'medium', 'high']).optional(),
 }
 
-export const Todo = Table('todo', zodToConvexFields(Todo_Schema))
+export type Task_Schema = infer(typeof Task_Schema)
+
+export const Task = Table('task', zodToConvexFields(Task_Schema))
 
 export const { create, read, paginate, update, destroy } = crud(
-  Todo,
+  Task,
   query,
   mutation,
 )

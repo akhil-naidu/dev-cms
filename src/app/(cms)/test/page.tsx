@@ -7,14 +7,14 @@ import { api } from '@/convex/_generated/api'
 
 export default function Home() {
   const todos = usePaginatedQuery(
-    api.todo.paginate,
+    api.task.paginate,
     {},
     { initialNumItems: 10 },
   )
-  const firstTodo = useQuery(api.todo.read, 'skip')
+  const firstTodo = useQuery(api.task.read, 'skip')
 
-  const createTodo = useMutation(api.todo.create)
-  const updateTodo = useMutation(api.todo.update)
+  const createTodo = useMutation(api.task.create)
+  const updateTodo = useMutation(api.task.update)
   // const deleteTodo = useMutation(api.todo.destroy)
 
   console.log(todos, firstTodo)
@@ -22,7 +22,7 @@ export default function Home() {
     <div>
       <div className='flex gap-2'>
         <Button
-          onClick={() => createTodo({ task: 'new todo', status: 'todo' })}>
+          onClick={() => createTodo({ title: 'new todo', status: 'todo' })}>
           create todo
         </Button>
 
@@ -30,7 +30,7 @@ export default function Home() {
           onClick={() =>
             updateTodo({
               id: todos?.results.at(-1)?._id!,
-              patch: { task: 'updated todo name' },
+              patch: { title: 'updated todo name' },
             })
           }>
           update Todo
@@ -38,7 +38,7 @@ export default function Home() {
       </div>
 
       {todos.results.map(todo => (
-        <div key={todo._id}>{todo.task}</div>
+        <div key={todo._id}>{todo.title}</div>
       ))}
     </div>
   )

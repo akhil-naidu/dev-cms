@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { type Task } from "@/db/schema"
-import { TrashIcon } from "@radix-ui/react-icons"
-import { type Row } from "@tanstack/react-table"
+import { deleteTasks } from '../_lib/mutations'
+import { TrashIcon } from '@radix-ui/react-icons'
+import { type Row } from '@tanstack/react-table'
+import * as React from 'react'
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -15,9 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-
-import { deleteTasks } from "../_lib/mutations"
+} from '@/components/ui/dialog'
 
 interface DeleteTasksDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
@@ -38,8 +36,8 @@ export function DeleteTasksDialog({
     <Dialog {...props}>
       {showTrigger ? (
         <DialogTrigger asChild>
-          <Button variant="outline" size="sm">
-            <TrashIcon className="mr-2 size-4" aria-hidden="true" />
+          <Button variant='outline' size='sm'>
+            <TrashIcon className='mr-2 size-4' aria-hidden='true' />
             Delete ({tasks.length})
           </Button>
         </DialogTrigger>
@@ -48,19 +46,19 @@ export function DeleteTasksDialog({
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your{" "}
-            <span className="font-medium">{tasks.length}</span>
-            {tasks.length === 1 ? " task" : " tasks"} from our servers.
+            This action cannot be undone. This will permanently delete your{' '}
+            <span className='font-medium'>{tasks.length}</span>
+            {tasks.length === 1 ? ' task' : ' tasks'} from our servers.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="gap-2 sm:space-x-0">
+        <DialogFooter className='gap-2 sm:space-x-0'>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant='outline'>Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
             <Button
-              aria-label="Delete selected rows"
-              variant="destructive"
+              aria-label='Delete selected rows'
+              variant='destructive'
               onClick={() => {
                 startDeleteTransition(() => {
                   deleteTasks({
@@ -69,8 +67,7 @@ export function DeleteTasksDialog({
                   })
                 })
               }}
-              disabled={isDeletePending}
-            >
+              disabled={isDeletePending}>
               Delete
             </Button>
           </DialogClose>
