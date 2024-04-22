@@ -2,6 +2,7 @@
 import Head from 'next/head'
 
 import DynamicForm from '@/components/DynamicForm'
+import InputWithoutLabel from '@/components/InputWithoutLabel'
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
 
       <main>
         <DynamicForm />
+        <InputWithoutLabel />
       </main>
 
       <footer>{/* Footer content */}</footer>
