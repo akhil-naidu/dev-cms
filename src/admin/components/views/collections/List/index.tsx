@@ -1,6 +1,6 @@
 import NoCollections from '@/admin/components/elements/EmptyStates/NoCollections'
-import { columns } from '@/admin/components/elements/Table/columns'
-import { DataTable } from '@/admin/components/elements/Table/data-table'
+import { columns } from '@/admin/components/elements/TableOld/columns'
+import { DataTable } from '@/admin/components/elements/TableOld/data-table'
 import { collections } from '@/admin/data/collections'
 import { tableData } from '@/admin/data/table/tasks'
 

@@ -1,4 +1,4 @@
-import SettingsProfilePage from '@/admin/components/elements/Forms'
+import SettingsProfilePage from '@/admin/components/elements/FormsOld'
 
 const EditView = () => {
   return <SettingsProfilePage />
