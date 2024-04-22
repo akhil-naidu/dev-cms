@@ -22,7 +22,7 @@ export default function Home() {
     <div>
       <div className='flex gap-2'>
         <Button
-          onClick={() => createTodo({ task: 'new todo', completed: false })}>
+          onClick={() => createTodo({ task: 'new todo', status: 'todo' })}>
           create todo
         </Button>
 
