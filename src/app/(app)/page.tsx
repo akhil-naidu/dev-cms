@@ -1,7 +1,6 @@
 // pages/index.js
 import Head from 'next/head'
 
-import DynamicForm from '@/components/DynamicForm'
 import InputWithoutLabel from '@/components/InputWithoutLabel'
 
 export default function Home() {
@@ -14,7 +13,7 @@ export default function Home() {
       </Head>
 
       <main>
-        <DynamicForm />
+        {/* <DynamicForm /> */}
         <InputWithoutLabel />
       </main>
 
