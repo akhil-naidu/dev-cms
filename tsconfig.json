@@ -20,9 +20,10 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/components/*": ["./src/components/*"],
-      "@/admin/components/*": ["./src/admin/components/*"],
+      "@/admin/*": ["./src/admin/*"],
       "@/convex/*": ["./convex/*"]
-    }
+    },
+    "target": "ES2017"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
