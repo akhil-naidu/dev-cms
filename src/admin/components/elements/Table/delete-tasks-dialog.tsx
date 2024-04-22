@@ -1,9 +1,9 @@
 'use client'
 
-import { deleteTasks } from '../_lib/mutations'
 import { TrashIcon } from '@radix-ui/react-icons'
 import { type Row } from '@tanstack/react-table'
-import * as React from 'react'
+import { useMutation } from 'convex/react'
+import { ComponentPropsWithoutRef, useTransition } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -16,9 +16,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { api } from '@/convex/_generated/api'
+import { type Task } from '@/convex/task'
 
 interface DeleteTasksDialogProps
-  extends React.ComponentPropsWithoutRef<typeof Dialog> {
+  extends ComponentPropsWithoutRef<typeof Dialog> {
   tasks: Row<Task>[]
   onSuccess?: () => void
   showTrigger?: boolean
@@ -30,7 +32,9 @@ export function DeleteTasksDialog({
   showTrigger = true,
   ...props
 }: DeleteTasksDialogProps) {
-  const [isDeletePending, startDeleteTransition] = React.useTransition()
+  const [isDeletePending, startDeleteTransition] = useTransition()
+
+  const deleteTasks = useMutation(api.task.destroy)
 
   return (
     <Dialog {...props}>
@@ -62,8 +66,7 @@ export function DeleteTasksDialog({
               onClick={() => {
                 startDeleteTransition(() => {
                   deleteTasks({
-                    rows: tasks,
-                    onSuccess,
+                    id: tasks.at(0)._id,
                   })
                 })
               }}

@@ -2,7 +2,8 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusIcon } from '@radix-ui/react-icons'
-import { type Row } from '@tanstack/react-table'
+import { useMutation } from 'convex/react'
+import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -34,35 +35,29 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { type Task, tasks } from '@/db/schema'
+import { api } from '@/convex/_generated/api'
+import { Task_Schema } from '@/convex/task'
 import { getErrorMessage } from '@/lib/handle-error'
 
-import { createTask } from './lib/actions'
 import { type CreateTaskSchema, createTaskSchema } from './lib/validations'
 
-interface CreateTaskDialogProps {
-  prevTasks: Row<Task>[]
-}
+export function CreateTaskDialog() {
+  const [open, setOpen] = useState(false)
+  const [isCreatePending, startCreateTransition] = useTransition()
 
-export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
-  const [open, setOpen] = React.useState(false)
-  const [isCreatePending, startCreateTransition] = React.useTransition()
+  const createTask = useMutation(api.task.create)
+
+  const { label, priority, status } = Task_Schema
 
   const form = useForm<CreateTaskSchema>({
     resolver: zodResolver(createTaskSchema),
   })
 
   function onSubmit(input: CreateTaskSchema) {
-    const anotherTaskId =
-      prevTasks[Math.floor(Math.random() * prevTasks.length)]?.id
-
-    if (!anotherTaskId) return
-
     startCreateTransition(() => {
       toast.promise(
         createTask({
           ...input,
-          anotherTaskId,
         }),
         {
           loading: 'Creating task...',
@@ -135,7 +130,7 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        {tasks.label.enumValues.map(item => (
+                        {Object.values(label.unwrap().enum).map(item => (
                           <SelectItem
                             key={item}
                             value={item}
@@ -167,7 +162,7 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        {tasks.status.enumValues.map(item => (
+                        {Object.values(status.enum).map(item => (
                           <SelectItem
                             key={item}
                             value={item}
@@ -199,7 +194,7 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        {tasks.priority.enumValues.map(item => (
+                        {Object.values(priority.unwrap().enum).map(item => (
                           <SelectItem
                             key={item}
                             value={item}
