@@ -1,4 +1,4 @@
-import { useQuery } from 'convex/react'
+import { usePaginatedQuery } from 'convex/react'
 import { Suspense } from 'react'
 
 import { DataTableSkeleton } from '@/admin/components/data-table/data-table-skeleton'
@@ -16,7 +16,11 @@ export interface IndexPageProps {
 const DefaultList = () => {
   // const search = searchParamsSchema.parse(searchParams)
 
-  const getTasks = useQuery(api.task.read, 'skip')
+  const getTasks = usePaginatedQuery(
+    api.task.paginate,
+    {},
+    { initialNumItems: 10 },
+  )
 
   const tasksPromise = Promise.resolve({
     data: getTasks,
