@@ -39,6 +39,8 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
         <CommandInput
           placeholder={title}
           className='h-full border-0 pl-0 ring-0'
+          // skipcq: JS-0757
+          autoFocus
         />
       </div>
       <CommandList>

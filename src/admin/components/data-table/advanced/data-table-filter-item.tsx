@@ -213,6 +213,8 @@ export function DataTableFilterItem<TData>({
             value={value}
             // skipcq: JS-0417
             onChange={event => setValue(event.target.value)}
+            // skipcq: JS-0757
+            autoFocus
           />
         )}
       </PopoverContent>
