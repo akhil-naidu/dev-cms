@@ -17,26 +17,28 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { api } from '@/convex/_generated/api'
-import { type Task } from '@/convex/task'
+import { Doc, Id } from '@/convex/_generated/dataModel'
 
 interface DeleteTasksDialogProps
   extends ComponentPropsWithoutRef<typeof Dialog> {
-  tasks: Row<Task>[]
+  tasks: Row<Doc<'task'>>[]
   onSuccess?: () => void
   showTrigger?: boolean
 }
 
 export function DeleteTasksDialog({
   tasks,
+  // skipcq: JS-0356
   onSuccess,
   showTrigger = true,
   ...props
 }: DeleteTasksDialogProps) {
   const [isDeletePending, startDeleteTransition] = useTransition()
 
-  const deleteTasks = useMutation(api.task.destroy)
+  const deleteTask = useMutation(api.task.destroy)
 
   return (
+    // skipcq: JS-0415
     <Dialog {...props}>
       {showTrigger ? (
         <DialogTrigger asChild>
@@ -63,10 +65,11 @@ export function DeleteTasksDialog({
             <Button
               aria-label='Delete selected rows'
               variant='destructive'
+              // skipcq: JS-0417
               onClick={() => {
                 startDeleteTransition(() => {
-                  deleteTasks({
-                    id: tasks.at(0)._id,
+                  deleteTask({
+                    id: tasks.at(0)?.original._id as Id<'task'>,
                   })
                 })
               }}
