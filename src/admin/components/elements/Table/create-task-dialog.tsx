@@ -37,7 +37,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { api } from '@/convex/_generated/api'
 import { Task_Schema } from '@/convex/task'
-import { getErrorMessage } from '@/lib/handle-error'
+import { getErrorMessage } from '@/utils/handle-error'
 
 import { type CreateTaskSchema, createTaskSchema } from './lib/validations'
 

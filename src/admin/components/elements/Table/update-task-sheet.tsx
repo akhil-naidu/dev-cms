@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { tasks, type Task } from "@/db/schema"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
+import { updateTask } from '../_lib/actions'
+import { type UpdateTaskSchema, updateTaskSchema } from '../_lib/validations'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as React from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
-import { getErrorMessage } from "@/lib/handle-error"
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -15,7 +15,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from '@/components/ui/form'
 import {
   Select,
   SelectContent,
@@ -23,7 +23,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select'
 import {
   Sheet,
   SheetClose,
@@ -32,11 +32,10 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet"
-import { Textarea } from "@/components/ui/textarea"
-
-import { updateTask } from "../_lib/actions"
-import { updateTaskSchema, type UpdateTaskSchema } from "../_lib/validations"
+} from '@/components/ui/sheet'
+import { Textarea } from '@/components/ui/textarea'
+import { type Task, tasks } from '@/db/schema'
+import { getErrorMessage } from '@/utils/handle-error'
 
 interface UpdateTaskSheetProps
   extends React.ComponentPropsWithRef<typeof Sheet> {
@@ -53,7 +52,7 @@ export function UpdateTaskSheet({
   const form = useForm<UpdateTaskSchema>({
     resolver: zodResolver(updateTaskSchema),
     defaultValues: {
-      title: task.title ?? "",
+      title: task.title ?? '',
       label: task.label,
       status: task.status,
       priority: task.priority,
@@ -68,24 +67,24 @@ export function UpdateTaskSheet({
           ...input,
         }),
         {
-          loading: "Updating task...",
+          loading: 'Updating task...',
           success: () => {
             onOpenChange?.(false)
-            return "Task updated"
+            return 'Task updated'
           },
-          error: (error) => {
+          error: error => {
             onOpenChange?.(false)
             return getErrorMessage(error)
           },
-        }
+        },
       )
     })
   }
 
   return (
     <Sheet onOpenChange={onOpenChange} {...props}>
-      <SheetContent className="flex flex-col gap-6 sm:max-w-md">
-        <SheetHeader className="text-left">
+      <SheetContent className='flex flex-col gap-6 sm:max-w-md'>
+        <SheetHeader className='text-left'>
           <SheetTitle>Update task</SheetTitle>
           <SheetDescription>
             Update the task details and save the changes
@@ -94,18 +93,17 @@ export function UpdateTaskSheet({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
+            className='flex flex-col gap-4'>
             <FormField
               control={form.control}
-              name="title"
+              name='title'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Do a kickflip"
-                      className="resize-none"
+                      placeholder='Do a kickflip'
+                      className='resize-none'
                       {...field}
                     />
                   </FormControl>
@@ -115,27 +113,25 @@ export function UpdateTaskSheet({
             />
             <FormField
               control={form.control}
-              name="label"
+              name='label'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Label</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                    defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="capitalize">
-                        <SelectValue placeholder="Select a label" />
+                      <SelectTrigger className='capitalize'>
+                        <SelectValue placeholder='Select a label' />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        {tasks.label.enumValues.map((item) => (
+                        {tasks.label.enumValues.map(item => (
                           <SelectItem
                             key={item}
                             value={item}
-                            className="capitalize"
-                          >
+                            className='capitalize'>
                             {item}
                           </SelectItem>
                         ))}
@@ -148,27 +144,25 @@ export function UpdateTaskSheet({
             />
             <FormField
               control={form.control}
-              name="status"
+              name='status'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                    defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="capitalize">
-                        <SelectValue placeholder="Select a status" />
+                      <SelectTrigger className='capitalize'>
+                        <SelectValue placeholder='Select a status' />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        {tasks.status.enumValues.map((item) => (
+                        {tasks.status.enumValues.map(item => (
                           <SelectItem
                             key={item}
                             value={item}
-                            className="capitalize"
-                          >
+                            className='capitalize'>
                             {item}
                           </SelectItem>
                         ))}
@@ -181,27 +175,25 @@ export function UpdateTaskSheet({
             />
             <FormField
               control={form.control}
-              name="priority"
+              name='priority'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Priority</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                    defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="capitalize">
-                        <SelectValue placeholder="Select a priority" />
+                      <SelectTrigger className='capitalize'>
+                        <SelectValue placeholder='Select a priority' />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        {tasks.priority.enumValues.map((item) => (
+                        {tasks.priority.enumValues.map(item => (
                           <SelectItem
                             key={item}
                             value={item}
-                            className="capitalize"
-                          >
+                            className='capitalize'>
                             {item}
                           </SelectItem>
                         ))}
@@ -212,9 +204,9 @@ export function UpdateTaskSheet({
                 </FormItem>
               )}
             />
-            <SheetFooter className="gap-2 pt-2 sm:space-x-0">
+            <SheetFooter className='gap-2 pt-2 sm:space-x-0'>
               <SheetClose asChild>
-                <Button type="button" variant="outline">
+                <Button type='button' variant='outline'>
                   Cancel
                 </Button>
               </SheetClose>

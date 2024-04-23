@@ -22,6 +22,7 @@
       "@/components/*": ["./src/components/*"],
       "@/admin/*": ["./src/admin/*"],
       "@/lib/*": ["./src/lib/*"],
+      "@/utils/*": ["./src/utils/*"],
       "@/convex/*": ["./convex/*"]
     },
     "target": "ES2017"

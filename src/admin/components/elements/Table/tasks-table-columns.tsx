@@ -1,16 +1,15 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { tasks, type Task } from "@/db/schema"
-import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import { type ColumnDef } from "@tanstack/react-table"
-import { toast } from "sonner"
+import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { type ColumnDef } from '@tanstack/react-table'
+import { useMutation } from 'convex/react'
+import { useState, useTransition } from 'react'
+import { toast } from 'sonner'
 
-import { getErrorMessage } from "@/lib/handle-error"
-import { formatDate } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { DataTableColumnHeader } from '@/admin/components/data-table/data-table-column-header'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,77 +22,88 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
+} from '@/components/ui/dropdown-menu'
+import { api } from '@/convex/_generated/api'
+import { Doc } from '@/convex/_generated/dataModel'
+import { Task_Schema } from '@/convex/task'
+import { formatDate } from '@/utils/format-date'
+import { getErrorMessage } from '@/utils/handle-error'
 
-import { updateTask } from "../_lib/actions"
-import { getPriorityIcon, getStatusIcon } from "../_lib/utils"
-import { DeleteTasksDialog } from "./delete-tasks-dialog"
-import { UpdateTaskSheet } from "./update-task-sheet"
+import { DeleteTasksDialog } from './delete-tasks-dialog'
+import { getPriorityIcon, getStatusIcon } from './lib/utils'
+import { UpdateTaskSheet } from './update-task-sheet'
 
-export function getColumns(): ColumnDef<Task>[] {
+export function getColumns(): ColumnDef<Doc<'task'>>[] {
+  const tasks = Task_Schema
+
+  const updateTask = useMutation(api.task.update)
+
   return [
     {
-      id: "select",
+      id: 'select',
       header: ({ table }) => (
         <Checkbox
           checked={
             table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
+            (table.getIsSomePageRowsSelected() && 'indeterminate')
           }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-          className="translate-y-0.5"
+          // skipcq: JS-0417
+          onCheckedChange={value =>
+            table.toggleAllPageRowsSelected(Boolean(value))
+          }
+          aria-label='Select all'
+          className='translate-y-0.5'
         />
       ),
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-          className="translate-y-0.5"
+          // skipcq: JS-0417
+          onCheckedChange={value => row.toggleSelected(Boolean(value))}
+          aria-label='Select row'
+          className='translate-y-0.5'
         />
       ),
       enableSorting: false,
       enableHiding: false,
     },
     {
-      accessorKey: "code",
+      accessorKey: 'code',
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Task" />
+        <DataTableColumnHeader column={column} title='Task' />
       ),
-      cell: ({ row }) => <div className="w-20">{row.getValue("code")}</div>,
+      cell: ({ row }) => <div className='w-20'>{row.getValue('code')}</div>,
       enableSorting: false,
       enableHiding: false,
     },
     {
-      accessorKey: "title",
+      accessorKey: 'title',
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Title" />
+        <DataTableColumnHeader column={column} title='Title' />
       ),
       cell: ({ row }) => {
-        const label = tasks.label.enumValues.find(
-          (label) => label === row.original.label
+        const label = Object.values(tasks.label.unwrap().enum).find(
+          label => label === row.original.label,
         )
 
         return (
-          <div className="flex space-x-2">
-            {label && <Badge variant="outline">{label}</Badge>}
-            <span className="max-w-[31.25rem] truncate font-medium">
-              {row.getValue("title")}
+          <div className='flex space-x-2'>
+            {label && <Badge variant='outline'>{label}</Badge>}
+            <span className='max-w-[31.25rem] truncate font-medium'>
+              {row.getValue('title')}
             </span>
           </div>
         )
       },
     },
     {
-      accessorKey: "status",
+      accessorKey: 'status',
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Status" />
+        <DataTableColumnHeader column={column} title='Status' />
       ),
       cell: ({ row }) => {
-        const status = tasks.status.enumValues.find(
-          (status) => status === row.original.status
+        const status = Object.values(tasks.status.enum).find(
+          status => status === row.original.status,
         )
 
         if (!status) return null
@@ -101,12 +111,12 @@ export function getColumns(): ColumnDef<Task>[] {
         const Icon = getStatusIcon(status)
 
         return (
-          <div className="flex w-[6.25rem] items-center">
+          <div className='flex w-[6.25rem] items-center'>
             <Icon
-              className="mr-2 size-4 text-muted-foreground"
-              aria-hidden="true"
+              className='mr-2 size-4 text-muted-foreground'
+              aria-hidden='true'
             />
-            <span className="capitalize">{status}</span>
+            <span className='capitalize'>{status}</span>
           </div>
         )
       },
@@ -115,13 +125,13 @@ export function getColumns(): ColumnDef<Task>[] {
       },
     },
     {
-      accessorKey: "priority",
+      accessorKey: 'priority',
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Priority" />
+        <DataTableColumnHeader column={column} title='Priority' />
       ),
       cell: ({ row }) => {
-        const priority = tasks.priority.enumValues.find(
-          (priority) => priority === row.original.priority
+        const priority = Object.values(tasks.priority.unwrap().enum).find(
+          priority => priority === row.original.priority,
         )
 
         if (!priority) return null
@@ -129,12 +139,12 @@ export function getColumns(): ColumnDef<Task>[] {
         const Icon = getPriorityIcon(priority)
 
         return (
-          <div className="flex items-center">
+          <div className='flex items-center'>
             <Icon
-              className="mr-2 size-4 text-muted-foreground"
-              aria-hidden="true"
+              className='mr-2 size-4 text-muted-foreground'
+              aria-hidden='true'
             />
-            <span className="capitalize">{priority}</span>
+            <span className='capitalize'>{priority}</span>
           </div>
         )
       },
@@ -143,22 +153,21 @@ export function getColumns(): ColumnDef<Task>[] {
       },
     },
     {
-      accessorKey: "createdAt",
+      accessorKey: 'createdAt',
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Created At" />
+        <DataTableColumnHeader column={column} title='Created At' />
       ),
       cell: ({ cell }) => formatDate(cell.getValue() as Date),
     },
     {
-      id: "actions",
+      id: 'actions',
       cell: function Cell({ row }) {
-        const [isUpdatePending, startUpdateTransition] = React.useTransition()
-        const [showUpdateTaskSheet, setShowUpdateTaskSheet] =
-          React.useState(false)
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] =
-          React.useState(false)
+        const [isUpdatePending, startUpdateTransition] = useTransition()
+        const [showUpdateTaskSheet, setShowUpdateTaskSheet] = useState(false)
+        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
 
         return (
+          // skipcq: JS-0415
           <>
             <UpdateTaskSheet
               open={showUpdateTaskSheet}
@@ -174,15 +183,16 @@ export function getColumns(): ColumnDef<Task>[] {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
-                  aria-label="Open menu"
-                  variant="ghost"
-                  className="flex size-8 p-0 data-[state=open]:bg-muted"
-                >
-                  <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+                  aria-label='Open menu'
+                  variant='ghost'
+                  className='flex size-8 p-0 data-[state=open]:bg-muted'>
+                  <DotsHorizontalIcon className='size-4' aria-hidden='true' />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>
+              <DropdownMenuContent align='end' className='w-40'>
+                <DropdownMenuItem
+                  // skipcq: JS-0417
+                  onSelect={() => setShowUpdateTaskSheet(true)}>
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuSub>
@@ -190,29 +200,28 @@ export function getColumns(): ColumnDef<Task>[] {
                   <DropdownMenuSubContent>
                     <DropdownMenuRadioGroup
                       value={row.original.label}
-                      onValueChange={(value) => {
+                      // skipcq: JS-0417
+                      onValueChange={value => {
                         startUpdateTransition(() => {
                           toast.promise(
                             updateTask({
-                              id: row.original.id,
-                              label: value as Task["label"],
+                              id: row.original._id,
+                              patch: { title: value },
                             }),
                             {
-                              loading: "Updating...",
-                              success: "Label updated",
-                              error: (err) => getErrorMessage(err),
-                            }
+                              loading: 'Updating...',
+                              success: 'Label updated',
+                              error: err => getErrorMessage(err),
+                            },
                           )
                         })
-                      }}
-                    >
-                      {tasks.label.enumValues.map((label) => (
+                      }}>
+                      {Object.values(tasks.label.unwrap().enum).map(label => (
                         <DropdownMenuRadioItem
                           key={label}
                           value={label}
-                          className="capitalize"
-                          disabled={isUpdatePending}
-                        >
+                          className='capitalize'
+                          disabled={isUpdatePending}>
                           {label}
                         </DropdownMenuRadioItem>
                       ))}
@@ -221,8 +230,8 @@ export function getColumns(): ColumnDef<Task>[] {
                 </DropdownMenuSub>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onSelect={() => setShowDeleteTaskDialog(true)}
-                >
+                  // skipcq: JS-0417
+                  onSelect={() => setShowDeleteTaskDialog(true)}>
                   Delete
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
