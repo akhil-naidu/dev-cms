@@ -105,6 +105,7 @@ export function DataTable<TData, TValue>({
                       style={
                         cell.id.endsWith('id') ? { cursor: 'pointer' } : {}
                       }
+                      // skipcq: JS-0417
                       onClick={() => {
                         if (cell.id.endsWith('id')) {
                           return router.push(
