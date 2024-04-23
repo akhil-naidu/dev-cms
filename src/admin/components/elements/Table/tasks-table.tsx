@@ -1,33 +1,43 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { tasks, type Task } from "@/db/schema"
-import type { DataTableFilterField } from "@/types"
+import { use, useMemo } from 'react'
 
-import { useDataTable } from "@/hooks/use-data-table"
-import { DataTableAdvancedToolbar } from "@/components/data-table/advanced/data-table-advanced-toolbar"
-import { DataTable } from "@/components/data-table/data-table"
-import { DataTableToolbar } from "@/components/data-table/data-table-toolbar"
+import { DataTableAdvancedToolbar } from '@/admin/components/data-table/advanced/data-table-advanced-toolbar'
+import { DataTable } from '@/admin/components/data-table/data-table'
+import { DataTableToolbar } from '@/admin/components/data-table/data-table-toolbar'
+import { useDataTable } from '@/admin/hooks/use-data-table'
+import { Doc } from '@/convex/_generated/dataModel'
+import { Task_Schema } from '@/convex/task'
 
-import type { getTasks } from "../_lib/queries"
-import { getPriorityIcon, getStatusIcon } from "../_lib/utils"
-import { getColumns } from "./tasks-table-columns"
-import { TasksTableFloatingBar } from "./tasks-table-floating-bar"
-import { useTasksTable } from "./tasks-table-provider"
-import { TasksTableToolbarActions } from "./tasks-table-toolbar-actions"
+import { getPriorityIcon, getStatusIcon } from './lib/utils'
+import { getColumns } from './tasks-table-columns'
+import { TasksTableFloatingBar } from './tasks-table-floating-bar'
+import { useTasksTable } from './tasks-table-provider'
+import { TasksTableToolbarActions } from './tasks-table-toolbar-actions'
+import type { DataTableFilterField } from './types'
+
+interface GetTasks {
+  data: Doc<'task'>[]
+  pageCount: number
+}
 
 interface TasksTableProps {
-  tasksPromise: ReturnType<typeof getTasks>
+  // skipcq: JS-0323
+  tasksPromise: Promise<GetTasks>
 }
 
 export function TasksTable({ tasksPromise }: TasksTableProps) {
   // Feature flags for showcasing some additional features. Feel free to remove them.
   const { featureFlags } = useTasksTable()
 
-  const { data, pageCount } = React.use(tasksPromise)
+  const { data, pageCount } = use(tasksPromise)
+
+  // const getTasks = useQuery(api.task.read, 'skip')
+
+  const tasks = Task_Schema
 
   // Memoize the columns so they don't re-render on every render
-  const columns = React.useMemo(() => getColumns(), [])
+  const columns = useMemo(() => getColumns(), [])
 
   /**
    * This component can render either a faceted filter or a search filter based on the `options` prop.
@@ -40,16 +50,16 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
    * @prop {React.ReactNode} [icon] - An optional icon to display next to the label.
    * @prop {boolean} [withCount] - An optional boolean to display the count of the filter option.
    */
-  const filterFields: DataTableFilterField<Task>[] = [
+  const filterFields: DataTableFilterField<Doc<'task'>>[] = [
     {
-      label: "Title",
-      value: "title",
-      placeholder: "Filter titles...",
+      label: 'Title',
+      value: 'title',
+      placeholder: 'Filter titles...',
     },
     {
-      label: "Status",
-      value: "status",
-      options: tasks.status.enumValues.map((status) => ({
+      label: 'Status',
+      value: 'status',
+      options: Object.values(tasks.status.enum).map(status => ({
         label: status[0]?.toUpperCase() + status.slice(1),
         value: status,
         icon: getStatusIcon(status),
@@ -57,9 +67,9 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
       })),
     },
     {
-      label: "Priority",
-      value: "priority",
-      options: tasks.priority.enumValues.map((priority) => ({
+      label: 'Priority',
+      value: 'priority',
+      options: Object.values(tasks.priority.unwrap().enum).map(priority => ({
         label: priority[0]?.toUpperCase() + priority.slice(1),
         value: priority,
         icon: getPriorityIcon(priority),
@@ -74,14 +84,14 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
     pageCount,
     // optional props
     filterFields,
-    enableAdvancedFilter: featureFlags.includes("advancedFilter"),
+    enableAdvancedFilter: featureFlags.includes('advancedFilter'),
     defaultPerPage: 10,
-    defaultSort: "createdAt.desc",
+    defaultSort: '_creationTime.asc',
   })
 
   return (
-    <div className="w-full space-y-2.5 overflow-auto">
-      {featureFlags.includes("advancedFilter") ? (
+    <div className='w-full space-y-2.5 overflow-auto'>
+      {featureFlags.includes('advancedFilter') ? (
         <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
           <TasksTableToolbarActions table={table} />
         </DataTableAdvancedToolbar>
@@ -93,7 +103,7 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
       <DataTable
         table={table}
         floatingBar={
-          featureFlags.includes("floatingBar") ? (
+          featureFlags.includes('floatingBar') ? (
             <TasksTableFloatingBar table={table} />
           ) : null
         }
