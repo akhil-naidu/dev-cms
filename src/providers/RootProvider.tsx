@@ -1,3 +1,5 @@
+import { TooltipProvider } from '@/components/ui/tooltip'
+
 import ConvexClientProvider from './ConvexClientProvider'
 
 // all the providers should be wrapped here
@@ -6,5 +8,9 @@ export default function RootProvider({
 }: {
   children: React.ReactNode
 }) {
-  return <ConvexClientProvider>{children}</ConvexClientProvider>
+  return (
+    <ConvexClientProvider>
+      <TooltipProvider>{children}</TooltipProvider>
+    </ConvexClientProvider>
+  )
 }

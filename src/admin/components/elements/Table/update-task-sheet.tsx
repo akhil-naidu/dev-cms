@@ -1,12 +1,13 @@
 'use client'
 
-import { updateTask } from '../_lib/actions'
-import { type UpdateTaskSchema, updateTaskSchema } from '../_lib/validations'
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as React from 'react'
+import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
+import {
+  type UpdateTaskSchema,
+  updateTaskSchema,
+} from '@/admin/components/elements/Table/lib/validations'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -34,12 +35,12 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 import { Textarea } from '@/components/ui/textarea'
-import { type Task, tasks } from '@/db/schema'
-import { getErrorMessage } from '@/utils/handle-error'
+import { Doc } from '@/convex/_generated/dataModel'
+import { Task_Schema } from '@/convex/task'
 
 interface UpdateTaskSheetProps
   extends React.ComponentPropsWithRef<typeof Sheet> {
-  task: Task
+  task: Doc<'task'>
 }
 
 export function UpdateTaskSheet({
@@ -47,7 +48,9 @@ export function UpdateTaskSheet({
   onOpenChange,
   ...props
 }: UpdateTaskSheetProps) {
-  const [isUpdatePending, startUpdateTransition] = React.useTransition()
+  const [isUpdatePending, startUpdateTransition] = useTransition()
+
+  const tasks = Task_Schema
 
   const form = useForm<UpdateTaskSchema>({
     resolver: zodResolver(updateTaskSchema),
@@ -59,29 +62,31 @@ export function UpdateTaskSheet({
     },
   })
 
+  // skipcq: JS-0356
   function onSubmit(input: UpdateTaskSchema) {
     startUpdateTransition(() => {
-      toast.promise(
-        updateTask({
-          id: task.id,
-          ...input,
-        }),
-        {
-          loading: 'Updating task...',
-          success: () => {
-            onOpenChange?.(false)
-            return 'Task updated'
-          },
-          error: error => {
-            onOpenChange?.(false)
-            return getErrorMessage(error)
-          },
-        },
-      )
+      // toast.promise(
+      //   updateTask({
+      //     id: task.id,
+      //     ...input,
+      //   }),
+      //   {
+      //     loading: 'Updating task...',
+      //     success: () => {
+      //       onOpenChange?.(false)
+      //       return 'Task updated'
+      //     },
+      //     error: error => {
+      //       onOpenChange?.(false)
+      //       return getErrorMessage(error)
+      //     },
+      //   },
+      // )
     })
   }
 
   return (
+    // skipcq: JS-0415
     <Sheet onOpenChange={onOpenChange} {...props}>
       <SheetContent className='flex flex-col gap-6 sm:max-w-md'>
         <SheetHeader className='text-left'>
@@ -97,6 +102,7 @@ export function UpdateTaskSheet({
             <FormField
               control={form.control}
               name='title'
+              // skipcq: JS-0417
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Title</FormLabel>
@@ -114,6 +120,7 @@ export function UpdateTaskSheet({
             <FormField
               control={form.control}
               name='label'
+              // skipcq: JS-0417
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Label</FormLabel>
@@ -127,7 +134,7 @@ export function UpdateTaskSheet({
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        {tasks.label.enumValues.map(item => (
+                        {Object.values(tasks.label.unwrap().enum).map(item => (
                           <SelectItem
                             key={item}
                             value={item}
@@ -145,6 +152,7 @@ export function UpdateTaskSheet({
             <FormField
               control={form.control}
               name='status'
+              // skipcq: JS-0417
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
@@ -158,7 +166,7 @@ export function UpdateTaskSheet({
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        {tasks.status.enumValues.map(item => (
+                        {Object.values(tasks.status.enum).map(item => (
                           <SelectItem
                             key={item}
                             value={item}
@@ -176,6 +184,7 @@ export function UpdateTaskSheet({
             <FormField
               control={form.control}
               name='priority'
+              // skipcq: JS-0417
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Priority</FormLabel>
@@ -189,14 +198,16 @@ export function UpdateTaskSheet({
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        {tasks.priority.enumValues.map(item => (
-                          <SelectItem
-                            key={item}
-                            value={item}
-                            className='capitalize'>
-                            {item}
-                          </SelectItem>
-                        ))}
+                        {Object.values(tasks.priority.unwrap().enum).map(
+                          item => (
+                            <SelectItem
+                              key={item}
+                              value={item}
+                              className='capitalize'>
+                              {item}
+                            </SelectItem>
+                          ),
+                        )}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
