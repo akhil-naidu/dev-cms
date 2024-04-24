@@ -22,7 +22,7 @@ const NavLinks: React.FC<Props> = props => {
 
         return (
           <Link
-            key={path}
+            key={slug}
             className={linkClassNames}
             href={path || `/admin/collections/${slug}`}>
             {icon}

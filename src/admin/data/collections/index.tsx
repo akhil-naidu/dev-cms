@@ -1,4 +1,5 @@
 import {
+  BellIcon,
   LineChartIcon,
   PackageIcon,
   ShoppingCartIcon,
@@ -8,6 +9,12 @@ import {
 import { Collections } from './types'
 
 export const collections: Collections = [
+  {
+    slug: 'task',
+    label: 'Tasks',
+    // path: '/admin/collections/orders',
+    icon: <BellIcon className='h-4 w-4' />,
+  },
   {
     slug: 'orders',
     label: 'Orders',
