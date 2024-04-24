@@ -98,7 +98,8 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
           <TasksTableToolbarActions table={table} />
         </DataTableToolbar>
       )}
-      <div className='flex flex-col justify-end w-full'>
+      {/* Todo: It will be moved to somewhere */}
+      <div className='flex justify-end py-2'>
         <Link
           href={`${pathname}/create`}
           className={buttonVariants({
