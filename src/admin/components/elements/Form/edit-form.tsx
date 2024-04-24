@@ -1,13 +1,16 @@
 'use client'
 
 import { LoaderIcon } from '../../icons'
+import { createTask } from '../Table/lib/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { usePathname, useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { updateTask } from '@/admin/components/elements/Table/lib/actions'
 import {
+  CreateTaskSchema,
   type UpdateTaskSchema,
   updateTaskSchema,
 } from '@/admin/components/elements/Table/lib/validations'
@@ -29,18 +32,25 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Doc } from '@/convex/_generated/dataModel'
+import { Doc, Id } from '@/convex/_generated/dataModel'
 import { Task_Schema } from '@/convex/task'
 import { getErrorMessage } from '@/utils/handle-error'
 
 interface Props {
-  task: Doc<'task'>
+  task?: Doc<'task'>
 }
 
 export function EditForm({ task }: Props) {
+  const [isCreatePending, startCreateTransition] = useTransition()
   const [isUpdatePending, startUpdateTransition] = useTransition()
 
   const tasks = Task_Schema
+
+  const pathname = usePathname()
+
+  const router = useRouter()
+
+  const isCreatePage = pathname.split('/').pop() === 'create'
 
   const form = useForm<UpdateTaskSchema>({
     resolver: zodResolver(updateTaskSchema),
@@ -52,12 +62,11 @@ export function EditForm({ task }: Props) {
     },
   })
 
-  function onSubmit(input: UpdateTaskSchema) {
-    toast.info('hii')
+  const handleUpdate = (input: UpdateTaskSchema) => {
     startUpdateTransition(() => {
       toast.promise(
         updateTask({
-          id: task._id,
+          id: task?._id as Id<'task'>,
           ...input,
         }),
         {
@@ -73,11 +82,32 @@ export function EditForm({ task }: Props) {
     })
   }
 
+  function handleCreate(input: CreateTaskSchema) {
+    startCreateTransition(() => {
+      toast.promise(
+        createTask({
+          ...input,
+        }),
+        {
+          loading: 'Creating task...',
+          success: data => {
+            form.reset()
+            router.push(data?.data?._id || '../')
+            return 'Task created'
+          },
+          error: error => {
+            return getErrorMessage(error)
+          },
+        },
+      )
+    })
+  }
+
   return (
     // skipcq: JS-0415
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(isCreatePage ? handleCreate : handleUpdate)}
         className='flex flex-col gap-4'>
         <FormField
           control={form.control}
@@ -188,13 +218,29 @@ export function EditForm({ task }: Props) {
           )}
         />
         <div>
-          <Button type='submit' disabled={isUpdatePending} className='min-w-24'>
-            {isUpdatePending ? (
-              <LoaderIcon className='animate-spin h-5 w-5' />
-            ) : (
-              'Update'
-            )}
-          </Button>
+          {isCreatePage ? (
+            <Button
+              type='submit'
+              disabled={isCreatePending}
+              className='min-w-24'>
+              {isCreatePending ? (
+                <LoaderIcon className='animate-spin h-5 w-5' />
+              ) : (
+                'Create'
+              )}
+            </Button>
+          ) : (
+            <Button
+              type='submit'
+              disabled={isUpdatePending}
+              className='min-w-24'>
+              {isUpdatePending ? (
+                <LoaderIcon className='animate-spin h-5 w-5' />
+              ) : (
+                'Update'
+              )}
+            </Button>
+          )}
         </div>
       </form>
     </Form>
