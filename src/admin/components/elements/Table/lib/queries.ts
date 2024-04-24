@@ -6,7 +6,6 @@ import { unstable_noStore as noStore } from 'next/cache'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 
-import { tasksData } from './data'
 import { GetTasksSchema } from './validations'
 
 export async function getTask(input: { id: Id<'task'> }) {
@@ -43,20 +42,20 @@ export async function getTasks(input: GetTasksSchema) {
   }
 }
 
-export async function getTaskCountByStatus() {
-  noStore()
-  try {
-    return await tasksData.length
-  } catch (err) {
-    return []
-  }
-}
+// export async function getTaskCountByStatus() {
+//   noStore()
+//   try {
+//     return await tasksData.length
+//   } catch (err) {
+//     return []
+//   }
+// }
 
-export async function getTaskCountByPriority() {
-  noStore()
-  try {
-    return await tasksData.length
-  } catch (err) {
-    return []
-  }
-}
+// export async function getTaskCountByPriority() {
+//   noStore()
+//   try {
+//     return await tasksData.length
+//   } catch (err) {
+//     return []
+//   }
+// }

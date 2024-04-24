@@ -13,7 +13,7 @@ export interface IndexPageProps {
 }
 
 // skipcq: JS-0116
-export default async function IndexPage({ searchParams }: IndexPageProps) {
+export default function IndexPage({ searchParams }: IndexPageProps) {
   const search = searchParamsSchema.parse(searchParams)
 
   const tasksPromise = getTasks(search)
