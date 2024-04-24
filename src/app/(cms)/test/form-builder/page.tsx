@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -45,6 +45,7 @@ const MyForm = () => {
         <FormField
           control={form.control}
           name='task'
+          // skipcq: JS-0417
           render={({ field }) => (
             <FormItem>
               <FormLabel>task</FormLabel>
@@ -60,6 +61,7 @@ const MyForm = () => {
         <FormField
           control={form.control}
           name='completed'
+          // skipcq: JS-0417
           render={({ field }) => (
             <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
               <div className='space-y-0.5'>
@@ -81,6 +83,7 @@ const MyForm = () => {
         <FormField
           control={form.control}
           name='email'
+          // skipcq: JS-0417
           render={({ field }) => (
             <FormItem>
               <FormLabel>email</FormLabel>
