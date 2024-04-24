@@ -4,7 +4,10 @@
     "cmdk",
     "embla",
     "hookform",
+    "shadcn",
+    "skipcq",
     "sonner",
+    "tanstack",
     "trivago",
     "vaul"
   ],
