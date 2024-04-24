@@ -24,13 +24,16 @@ export default function Home() {
     <div>
       <div className='flex gap-2'>
         <Button
+          // skipcq: JS-0417
           onClick={() => createTodo({ title: 'new todo', status: 'todo' })}>
           create todo
         </Button>
 
         <Button
+          // skipcq: JS-0417
           onClick={() =>
             updateTodo({
+              // skipcq: JS-0338, JS-0339
               id: todos?.results.at(-1)?._id!,
               patch: { title: 'updated todo name' },
             })

@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react'
+import { use, useMemo } from 'react'
 
 import { DataTableAdvancedToolbar } from '@/admin/components/data-table/advanced/data-table-advanced-toolbar'
 import { DataTable } from '@/admin/components/data-table/data-table'
@@ -27,10 +27,10 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
 
   const tasks = Task_Schema
 
-  const { data, pageCount } = React.use(tasksPromise)
+  const { data, pageCount } = use(tasksPromise)
 
   // Memoize the columns so they don't re-render on every render
-  const columns = React.useMemo(() => getColumns(), [])
+  const columns = useMemo(() => getColumns(), [])
 
   /**
    * This component can render either a faceted filter or a search filter based on the `options` prop.

@@ -2,7 +2,7 @@
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { type ColumnDef } from '@tanstack/react-table'
-import * as React from 'react'
+import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
 import { DataTableColumnHeader } from '@/admin/components/data-table/data-table-column-header'
@@ -150,20 +150,18 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
       },
     },
     {
-      accessorKey: 'createdAt',
+      accessorKey: '_creationTime',
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title='Created At' />
       ),
-      cell: ({ cell }) => formatDate(Date.now()),
+      cell: ({ cell }) => formatDate(cell.getValue() as Date),
     },
     {
       id: 'actions',
       cell: function Cell({ row }) {
-        const [isUpdatePending, startUpdateTransition] = React.useTransition()
-        const [showUpdateTaskSheet, setShowUpdateTaskSheet] =
-          React.useState(false)
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] =
-          React.useState(false)
+        const [isUpdatePending, startUpdateTransition] = useTransition()
+        const [showUpdateTaskSheet, setShowUpdateTaskSheet] = useState(false)
+        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
 
         return (
           // skipcq: JS-0415

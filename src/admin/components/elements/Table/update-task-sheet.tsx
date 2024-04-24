@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as React from 'react'
+import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -49,7 +49,7 @@ export function UpdateTaskSheet({
   onOpenChange,
   ...props
 }: UpdateTaskSheetProps) {
-  const [isUpdatePending, startUpdateTransition] = React.useTransition()
+  const [isUpdatePending, startUpdateTransition] = useTransition()
 
   const tasks = Task_Schema
 

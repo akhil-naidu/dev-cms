@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { Suspense } from 'react'
 
 import { DataTableSkeleton } from '@/admin/components/data-table/data-table-skeleton'
 import { DateRangePicker } from '@/admin/components/elements/DateRangePicker'
@@ -17,7 +17,7 @@ export interface IndexPageProps {
 export default async function IndexPage({ searchParams }: IndexPageProps) {
   const search = searchParamsSchema.parse(searchParams)
 
-  const tasksPromise = getTasks()
+  const tasksPromise = getTasks(search)
 
   return (
     <Shell className='gap-2'>
@@ -36,7 +36,7 @@ export default async function IndexPage({ searchParams }: IndexPageProps) {
           triggerClassName='ml-auto w-56 sm:w-60'
           align='end'
         />
-        <React.Suspense
+        <Suspense
           fallback={
             <DataTableSkeleton
               columnCount={5}
@@ -51,7 +51,7 @@ export default async function IndexPage({ searchParams }: IndexPageProps) {
            * @see https://react.dev/reference/react/use
            */}
           <TasksTable tasksPromise={tasksPromise} />
-        </React.Suspense>
+        </Suspense>
       </TasksTableProvider>
     </Shell>
   )

@@ -6,7 +6,7 @@ import {
 } from '@radix-ui/react-icons'
 import { SelectTrigger } from '@radix-ui/react-select'
 import { type Table } from '@tanstack/react-table'
-import * as React from 'react'
+import { useEffect, useTransition } from 'react'
 
 import { Kbd } from '@/admin/components/elements/Kbd'
 import { Button } from '@/components/ui/button'
@@ -34,12 +34,12 @@ interface TasksTableFloatingBarProps {
 export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
   const rows = table.getFilteredSelectedRowModel().rows
 
-  const [isPending, startTransition] = React.useTransition()
+  const [isPending, startTransition] = useTransition()
 
   const tasks = Task_Schema
 
   // Clear selection on Escape key press
-  React.useEffect(() => {
+  useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         table.toggleAllRowsSelected(false)

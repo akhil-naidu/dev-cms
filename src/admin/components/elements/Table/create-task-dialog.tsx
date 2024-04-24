@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusIcon } from '@radix-ui/react-icons'
-import * as React from 'react'
+import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -41,8 +41,8 @@ import { createTask } from './lib/actions'
 import { type CreateTaskSchema, createTaskSchema } from './lib/validations'
 
 export function CreateTaskDialog() {
-  const [open, setOpen] = React.useState(false)
-  const [isCreatePending, startCreateTransition] = React.useTransition()
+  const [open, setOpen] = useState(false)
+  const [isCreatePending, startCreateTransition] = useTransition()
 
   const { label, priority, status } = Task_Schema
 

@@ -2,7 +2,7 @@
 
 import { TrashIcon } from '@radix-ui/react-icons'
 import { type Row } from '@tanstack/react-table'
-import * as React from 'react'
+import { useTransition } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -32,7 +32,7 @@ export function DeleteTasksDialog({
   showTrigger = true,
   ...props
 }: DeleteTasksDialogProps) {
-  const [isDeletePending, startDeleteTransition] = React.useTransition()
+  const [isDeletePending, startDeleteTransition] = useTransition()
 
   return (
     // skipcq: JS-0415
