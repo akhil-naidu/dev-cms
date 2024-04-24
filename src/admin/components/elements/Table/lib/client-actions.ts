@@ -15,11 +15,11 @@ export function deleteTasks({
 }) {
   toast.promise(
     Promise.all(
-      // skipcq: JS-0116
-      rows.map(async row =>
-        deleteTask({
-          id: row.original._id,
-        }),
+      rows.map(
+        async row =>
+          await deleteTask({
+            id: row.original._id,
+          }),
       ),
     ),
     {

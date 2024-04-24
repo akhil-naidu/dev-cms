@@ -65,11 +65,11 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
       enableHiding: false,
     },
     {
-      accessorKey: 'code',
+      accessorKey: '_id',
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title='Task' />
+        <DataTableColumnHeader column={column} title='Id' />
       ),
-      cell: ({ row }) => <div className='w-20'>{row.getValue('code')}</div>,
+      cell: ({ row }) => <div>{row.getValue('_id')}</div>,
       enableSorting: false,
       enableHiding: false,
     },

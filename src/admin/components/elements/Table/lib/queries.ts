@@ -23,7 +23,7 @@ export async function getTasks(input: GetTasksSchema) {
       },
     })
 
-    return { data: data.page, pageCount: per_page }
+    return { data: data.page, pageCount: 2 }
   } catch (err) {
     return { data: [], pageCount: 0 }
   }

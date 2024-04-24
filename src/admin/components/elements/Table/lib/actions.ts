@@ -1,7 +1,10 @@
 'use server'
 
+import { fetchMutation } from 'convex/nextjs'
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache'
 
+import { api } from '@/convex/_generated/api'
+import { Id } from '@/convex/_generated/dataModel'
 import { getErrorMessage } from '@/utils/handle-error'
 
 import type { CreateTaskSchema, UpdateTaskSchema } from './validations'
@@ -9,21 +12,16 @@ import type { CreateTaskSchema, UpdateTaskSchema } from './validations'
 // skipcq: JS-0356
 export async function createTask(input: CreateTaskSchema) {
   noStore()
+
   try {
-    await Promise.all([
-      // db.insert(tasks).values({
-      //   code: `TASK-${customAlphabet("0123456789", 4)()}`,
-      //   title: input.title,
-      //   status: input.status,
-      //   label: input.label,
-      //   priority: input.priority,
-      // }),
-    ])
+    const data = await fetchMutation(api.task.create, {
+      ...input,
+    })
 
     revalidatePath('/')
 
     return {
-      data: null,
+      data,
       error: null,
     }
   } catch (err) {
@@ -35,23 +33,21 @@ export async function createTask(input: CreateTaskSchema) {
 }
 
 // skipcq: JS-0116, JS-0356
-export async function updateTask(input: UpdateTaskSchema & { id: string }) {
+export async function updateTask(input: UpdateTaskSchema & { id: Id<'task'> }) {
   noStore()
+
+  const { id, ...newData } = input
+
   try {
-    // await db
-    //   .update(tasks)
-    //   .set({
-    //     title: input.title,
-    //     label: input.label,
-    //     status: input.status,
-    //     priority: input.priority,
-    //   })
-    //   .where(eq(tasks.id, input.id))
+    const data = await fetchMutation(api.task.update, {
+      id,
+      patch: { ...newData },
+    })
 
     revalidatePath('/')
 
     return {
-      data: null,
+      data,
       error: null,
     }
   } catch (err) {
@@ -63,9 +59,13 @@ export async function updateTask(input: UpdateTaskSchema & { id: string }) {
 }
 
 // skipcq: JS-0116, JS-0356
-export async function deleteTask(input: { id: string }) {
+export async function deleteTask(input: { id: Id<'task'> }) {
+  const { id } = input
+
   try {
-    // await db.delete(tasks).where(eq(tasks.id, input.id))
+    await fetchMutation(api.task.destroy, {
+      id,
+    })
 
     revalidatePath('/')
 
