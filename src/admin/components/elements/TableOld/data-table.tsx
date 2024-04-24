@@ -50,7 +50,10 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
       columnFilters,
+      expanded: true,
     },
+    enableExpanding: true,
+    enableColumnResizing: true,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -103,13 +106,15 @@ export function DataTable<TData, TValue>({
                     <TableCell
                       key={cell.id}
                       style={
-                        cell.id.endsWith('id') ? { cursor: 'pointer' } : {}
+                        cell.id.endsWith('id')
+                          ? { cursor: 'pointer', width: 'fit-content' }
+                          : {}
                       }
                       // skipcq: JS-0417
                       onClick={() => {
                         if (cell.id.endsWith('id')) {
                           return router.push(
-                            `${pathname}/${row.getValue('id')}`,
+                            `${pathname}/${row.getValue('_id')}`,
                           )
                         }
                         return null
