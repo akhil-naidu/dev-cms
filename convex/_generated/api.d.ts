@@ -14,7 +14,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as todo from "../todo.js";
+import type * as task from "../task.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -25,7 +25,7 @@ import type * as todo from "../todo.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  todo: typeof todo;
+  task: typeof task;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

@@ -3,14 +3,14 @@
 import { ColumnDef } from '@tanstack/react-table'
 
 import { labels, priorities, statuses } from '@/admin/data/table/data'
-import { TableItem } from '@/admin/data/table/types'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { DataTableColumnHeader } from './data-table-column-header'
 import { DataTableRowActions } from './data-table-row-actions'
 
-export const columns: ColumnDef<TableItem>[] = [
+// skipcq: JS-0323
+export const columns: ColumnDef<any>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -41,12 +41,12 @@ export const columns: ColumnDef<TableItem>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'id',
+    accessorKey: '_id',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Task' />
     ),
     cell: ({ row }) => {
-      return <div className='w-[80px]'>{row.getValue('id')}</div>
+      return <div className='w-[80px]'>{row.getValue('_id')}</div>
     },
     enableSorting: false,
     enableHiding: false,

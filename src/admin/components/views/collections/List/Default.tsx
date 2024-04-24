@@ -1,46 +1,65 @@
-'use client'
+import { usePaginatedQuery } from 'convex/react'
 
-import Link from 'next/link'
+import type { SearchParams } from '@/admin/components/elements/Table/types'
+import { columns } from '@/admin/components/elements/TableOld/columns'
+import { DataTable } from '@/admin/components/elements/TableOld/data-table'
+import { api } from '@/convex/_generated/api'
 
-import { CollectionItem } from '@/admin/data/collections/types'
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+export interface IndexPageProps {
+  searchParams: SearchParams
+}
 
-import { Props } from './types'
+const DefaultList = () => {
+  // const search = searchParamsSchema.parse(searchParams)
 
-const DefaultList: React.FC<Props> = props => {
-  const { collections } = props
-
-  return (
-    // skipcq: JS-0415
-    <main className='flex flex-1 flex-col gap-6 p-6 lg:gap-8 lg:p-10'>
-      <div className='flex items-center'>
-        <h1 className='text-lg font-semibold md:text-2xl'>Collections</h1>
-      </div>
-      <section className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-        {collections?.map((collection: CollectionItem) => {
-          // skipcq: JS-0356
-          const { slug, label, description, icon, path } = collection
-
-          return (
-            <Link key={slug} href={path || `/admin/collections/${slug}`}>
-              <Card>
-                <CardHeader>
-                  {/* <SearchIcon className='h-8 w-8 mb-4' /> */}
-                  <CardTitle>{label}</CardTitle>
-                  <CardDescription>{description}</CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-          )
-        })}
-      </section>
-    </main>
+  const { results } = usePaginatedQuery(
+    api.task.paginate,
+    {},
+    { initialNumItems: 20 },
   )
+
+  // const tasksPromise = Promise.resolve({
+  //   data: getTasks,
+  //   pageCount: 1,
+  // })
+
+  return <DataTable data={results} columns={columns} />
+  // return (
+  //   <Shell className='gap-2'>
+  //     {/**
+  //      * The `TasksTableProvider` is use to enable some feature flags for the `TasksTable` component.
+  //      * Feel free to remove this, as it's not required for the `TasksTable` component to work.
+  //      */}
+  //     <TasksTableProvider>
+  //       {/**
+  //        * The `DateRangePicker` component is used to render the date range picker UI.
+  //        * It is used to filter the tasks based on the selected date range it was created at.
+  //        * The business logic for filtering the tasks based on the selected date range is handled inside the component.
+  //        */}
+  //       <DateRangePicker
+  //         triggerSize='sm'
+  //         triggerClassName='ml-auto w-56 sm:w-60'
+  //         align='end'
+  //       />
+  //       <Suspense
+  //         fallback={
+  //           <DataTableSkeleton
+  //             columnCount={5}
+  //             searchableColumnCount={1}
+  //             filterableColumnCount={2}
+  //             cellWidths={['10rem', '40rem', '12rem', '12rem', '8rem']}
+  //             shrinkZero
+  //           />
+  //         }>
+  //         {/**
+  //          * Passing promises and consuming them using React.use for triggering the suspense fallback.
+  //          * @see https://react.dev/reference/react/use
+  //          */}
+  //         <TasksTable tasksPromise={tasksPromise} />
+  //       </Suspense>
+  //     </TasksTableProvider>
+  //   </Shell>
+  // )
 }
 
 export default DefaultList

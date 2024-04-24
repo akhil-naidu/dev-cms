@@ -1,7 +1,7 @@
 import { defineSchema } from 'convex/server'
 
-import { Todo } from '@/convex/todo'
+import { Task } from '@/convex/task'
 
 export default defineSchema({
-  todo: Todo.table,
+  task: Task.table,
 })

@@ -1,13 +1,12 @@
+'use client'
+
 import NoCollections from '@/admin/components/elements/EmptyStates/NoCollections'
-import { columns } from '@/admin/components/elements/Table/columns'
-import { DataTable } from '@/admin/components/elements/Table/data-table'
 import { collections } from '@/admin/data/collections'
-import { tableData } from '@/admin/data/table/tasks'
+
+import DefaultList from './Default'
 
 const ListView: React.FC = () => {
   return (
-    // skipcq: JS-0415
-
     <div className='h-full flex-1 flex-col space-y-8 p-8 md:flex'>
       <div className='flex items-center justify-between space-y-2'>
         <div>
@@ -17,11 +16,7 @@ const ListView: React.FC = () => {
           </p>
         </div>
       </div>
-      {collections.length ? (
-        <DataTable data={tableData} columns={columns} />
-      ) : (
-        <NoCollections />
-      )}
+      {collections.length ? <DefaultList /> : <NoCollections />}
     </div>
   )
 }
