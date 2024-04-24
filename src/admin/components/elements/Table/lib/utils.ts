@@ -9,19 +9,19 @@ import {
   StopwatchIcon,
 } from '@radix-ui/react-icons'
 
-import { type Task } from '@/convex/task'
+import { Doc } from '@/convex/_generated/dataModel'
 
 /**
  * Returns the appropriate status icon based on the provided status.
  * @param status - The status of the task.
  * @returns A React component representing the status icon.
  */
-export function getStatusIcon(status: Task['status']) {
+export function getStatusIcon(status: Doc<'task'>['status']) {
   const statusIcons = {
     canceled: CrossCircledIcon,
     backlog: ArrowDownIcon, // Example icon, you can replace it with the appropriate one
     todo: QuestionMarkCircledIcon,
-    'in progress': StopwatchIcon,
+    'in-progress': StopwatchIcon,
     done: CheckCircledIcon,
   }
 
@@ -33,7 +33,7 @@ export function getStatusIcon(status: Task['status']) {
  * @param priority - The priority of the task.
  * @returns A React component representing the priority icon.
  */
-export function getPriorityIcon(priority: Task['priority']) {
+export function getPriorityIcon(priority: Doc<'task'>['priority']) {
   const priorityIcons = {
     low: ArrowDownIcon,
     medium: ArrowRightIcon,

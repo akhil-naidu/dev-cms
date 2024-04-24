@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
+import * as React from 'react'
 
 import {
   type DataTableConfig,
@@ -20,7 +20,7 @@ interface TasksTableContextProps {
   setFeatureFlags: React.Dispatch<React.SetStateAction<FeatureFlagValue[]>>
 }
 
-const TasksTableContext = createContext<TasksTableContextProps>({
+const TasksTableContext = React.createContext<TasksTableContextProps>({
   featureFlags: [],
   setFeatureFlags: () => {
     // empty because <reason>
@@ -28,7 +28,7 @@ const TasksTableContext = createContext<TasksTableContextProps>({
 })
 
 export function useTasksTable() {
-  const context = useContext(TasksTableContext)
+  const context = React.useContext(TasksTableContext)
   if (!context) {
     throw new Error('useTasksTable must be used within a TasksTableProvider')
   }
@@ -36,7 +36,7 @@ export function useTasksTable() {
 }
 
 export function TasksTableProvider({ children }: React.PropsWithChildren) {
-  const [featureFlags, setFeatureFlags] = useState<FeatureFlagValue[]>([])
+  const [featureFlags, setFeatureFlags] = React.useState<FeatureFlagValue[]>([])
 
   return (
     <TasksTableContext.Provider

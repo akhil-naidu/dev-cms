@@ -2,8 +2,7 @@
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { type ColumnDef } from '@tanstack/react-table'
-import { useMutation } from 'convex/react'
-import { useState, useTransition } from 'react'
+import * as React from 'react'
 import { toast } from 'sonner'
 
 import { DataTableColumnHeader } from '@/admin/components/data-table/data-table-column-header'
@@ -23,20 +22,18 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { api } from '@/convex/_generated/api'
 import { Doc } from '@/convex/_generated/dataModel'
 import { Task_Schema } from '@/convex/task'
 import { formatDate } from '@/utils/format-date'
 import { getErrorMessage } from '@/utils/handle-error'
 
 import { DeleteTasksDialog } from './delete-tasks-dialog'
+import { updateTask } from './lib/actions'
 import { getPriorityIcon, getStatusIcon } from './lib/utils'
 import { UpdateTaskSheet } from './update-task-sheet'
 
 export function getColumns(): ColumnDef<Doc<'task'>>[] {
   const tasks = Task_Schema
-
-  const updateTask = useMutation(api.task.update)
 
   return [
     {
@@ -157,14 +154,16 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title='Created At' />
       ),
-      cell: ({ cell }) => formatDate(cell.getValue() as Date),
+      cell: ({ cell }) => formatDate(Date.now()),
     },
     {
       id: 'actions',
       cell: function Cell({ row }) {
-        const [isUpdatePending, startUpdateTransition] = useTransition()
-        const [showUpdateTaskSheet, setShowUpdateTaskSheet] = useState(false)
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
+        const [isUpdatePending, startUpdateTransition] = React.useTransition()
+        const [showUpdateTaskSheet, setShowUpdateTaskSheet] =
+          React.useState(false)
+        const [showDeleteTaskDialog, setShowDeleteTaskDialog] =
+          React.useState(false)
 
         return (
           // skipcq: JS-0415
@@ -200,13 +199,14 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
                   <DropdownMenuSubContent>
                     <DropdownMenuRadioGroup
                       value={row.original.label}
-                      // skipcq: JS-0417
+                      // skipcq: JS-0417, JS-0356
                       onValueChange={value => {
                         startUpdateTransition(() => {
                           toast.promise(
                             updateTask({
                               id: row.original._id,
-                              patch: { title: value },
+                              title: row.original.title,
+                              status: row.original.status,
                             }),
                             {
                               loading: 'Updating...',

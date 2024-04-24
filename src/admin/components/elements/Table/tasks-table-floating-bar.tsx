@@ -1,4 +1,3 @@
-import { Kbd } from '../Kbd'
 import {
   ArrowUpIcon,
   CheckCircledIcon,
@@ -7,8 +6,9 @@ import {
 } from '@radix-ui/react-icons'
 import { SelectTrigger } from '@radix-ui/react-select'
 import { type Table } from '@tanstack/react-table'
-import { useEffect, useTransition } from 'react'
+import * as React from 'react'
 
+import { Kbd } from '@/admin/components/elements/Kbd'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -25,6 +25,8 @@ import {
 import { Doc } from '@/convex/_generated/dataModel'
 import { Task_Schema } from '@/convex/task'
 
+import { deleteTasks, updateTasks } from './lib/client-actions'
+
 interface TasksTableFloatingBarProps {
   table: Table<Doc<'task'>>
 }
@@ -32,15 +34,12 @@ interface TasksTableFloatingBarProps {
 export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
   const rows = table.getFilteredSelectedRowModel().rows
 
-  const [isPending] = useTransition()
-
-  // const deleteTasks = useMutation(api.task.destroy)
-  // const updateTasks = useMutation(api.task.update)
+  const [isPending, startTransition] = React.useTransition()
 
   const tasks = Task_Schema
 
   // Clear selection on Escape key press
-  useEffect(() => {
+  React.useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         table.toggleAllRowsSelected(false)
@@ -86,16 +85,16 @@ export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
           <Separator orientation='vertical' className='hidden h-5 sm:block' />
           <div className='flex items-center gap-1.5'>
             <Select
-            // skipcq: JS-0417
-            // onValueChange={(value: Doc<'task'>['status']) => {
-            //   startTransition(() => {
-            //     updateTasks({
-            //       id: tasks,
-
-            //     })
-            //   })
-            // }}
-            >
+              // skipcq: JS-0417
+              onValueChange={(value: Doc<'task'>['status']) => {
+                startTransition(() => {
+                  updateTasks({
+                    rows,
+                    status: value,
+                    onSuccess: () => table.toggleAllRowsSelected(false),
+                  })
+                })
+              }}>
               <Tooltip>
                 <SelectTrigger asChild>
                   <TooltipTrigger asChild>
@@ -126,17 +125,16 @@ export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
               </SelectContent>
             </Select>
             <Select
-            // skipcq: JS-0417
-            // onValueChange={(value: Doc<'task'>['priority']) => {
-            //   startTransition(() => {
-            //     updateTasks({
-            //       rows,
-            //       priority: value,
-            //       onSuccess: () => table.toggleAllRowsSelected(false),
-            //     })
-            //   })
-            // }}
-            >
+              // skipcq: JS-0417
+              onValueChange={(value: string) => {
+                startTransition(() => {
+                  updateTasks({
+                    rows,
+                    priority: value as Doc<'task'>['priority'],
+                    onSuccess: () => table.toggleAllRowsSelected(false),
+                  })
+                })
+              }}>
               <Tooltip>
                 <SelectTrigger asChild>
                   <TooltipTrigger asChild>
@@ -173,14 +171,14 @@ export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
                   size='icon'
                   className='size-7 border'
                   // skipcq: JS-0417
-                  // onClick={() => {
-                  //   startTransition(() => {
-                  //     deleteTasks({
-                  //       id: tasks,
-                  //       onSuccess: () => table.toggleAllRowsSelected(false),
-                  //     })
-                  //   })
-                  // }}
+                  onClick={() => {
+                    startTransition(() => {
+                      deleteTasks({
+                        rows,
+                        onSuccess: () => table.toggleAllRowsSelected(false),
+                      })
+                    })
+                  }}
                   disabled={isPending}>
                   <TrashIcon className='size-4' aria-hidden='true' />
                 </Button>

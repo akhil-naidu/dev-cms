@@ -1,13 +1,10 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useTransition } from 'react'
+import * as React from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
-import {
-  type UpdateTaskSchema,
-  updateTaskSchema,
-} from '@/admin/components/elements/Table/lib/validations'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -37,6 +34,10 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { Doc } from '@/convex/_generated/dataModel'
 import { Task_Schema } from '@/convex/task'
+import { getErrorMessage } from '@/utils/handle-error'
+
+import { updateTask } from './lib/actions'
+import { type UpdateTaskSchema, updateTaskSchema } from './lib/validations'
 
 interface UpdateTaskSheetProps
   extends React.ComponentPropsWithRef<typeof Sheet> {
@@ -48,7 +49,7 @@ export function UpdateTaskSheet({
   onOpenChange,
   ...props
 }: UpdateTaskSheetProps) {
-  const [isUpdatePending, startUpdateTransition] = useTransition()
+  const [isUpdatePending, startUpdateTransition] = React.useTransition()
 
   const tasks = Task_Schema
 
@@ -62,26 +63,25 @@ export function UpdateTaskSheet({
     },
   })
 
-  // skipcq: JS-0356
   function onSubmit(input: UpdateTaskSchema) {
     startUpdateTransition(() => {
-      // toast.promise(
-      //   updateTask({
-      //     id: task.id,
-      //     ...input,
-      //   }),
-      //   {
-      //     loading: 'Updating task...',
-      //     success: () => {
-      //       onOpenChange?.(false)
-      //       return 'Task updated'
-      //     },
-      //     error: error => {
-      //       onOpenChange?.(false)
-      //       return getErrorMessage(error)
-      //     },
-      //   },
-      // )
+      toast.promise(
+        updateTask({
+          id: task._id,
+          ...input,
+        }),
+        {
+          loading: 'Updating task...',
+          success: () => {
+            onOpenChange?.(false)
+            return 'Task updated'
+          },
+          error: error => {
+            onOpenChange?.(false)
+            return getErrorMessage(error)
+          },
+        },
+      )
     })
   }
 

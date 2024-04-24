@@ -2,8 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusIcon } from '@radix-ui/react-icons'
-import { useMutation } from 'convex/react'
-import { useState, useTransition } from 'react'
+import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -35,17 +34,15 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { api } from '@/convex/_generated/api'
 import { Task_Schema } from '@/convex/task'
 import { getErrorMessage } from '@/utils/handle-error'
 
+import { createTask } from './lib/actions'
 import { type CreateTaskSchema, createTaskSchema } from './lib/validations'
 
 export function CreateTaskDialog() {
-  const [open, setOpen] = useState(false)
-  const [isCreatePending, startCreateTransition] = useTransition()
-
-  const createTask = useMutation(api.task.create)
+  const [open, setOpen] = React.useState(false)
+  const [isCreatePending, startCreateTransition] = React.useTransition()
 
   const { label, priority, status } = Task_Schema
 

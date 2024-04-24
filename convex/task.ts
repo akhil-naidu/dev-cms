@@ -11,8 +11,8 @@ import { mutation, query } from './_generated/server'
 
 export const Task_Schema = {
   title: z_string(),
-  status: z_enum(['canceled', 'backlog', 'todo', 'in progress', 'done']),
-  label: z_enum(['bug', 'feature', 'documentation']).optional(),
+  status: z_enum(['todo', 'in-progress', 'done', 'canceled']),
+  label: z_enum(['bug', 'feature', 'enhancement', 'documentation']).optional(),
   priority: z_enum(['low', 'medium', 'high']).optional(),
 }
 
