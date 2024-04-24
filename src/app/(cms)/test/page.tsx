@@ -1,10 +1,9 @@
 'use client'
 
-import { useMutation, usePaginatedQuery, useQuery } from 'convex/react'
+import { useMutation, usePaginatedQuery } from 'convex/react'
 
 import { Button } from '@/components/ui/button'
 import { api } from '@/convex/_generated/api'
-import { Id } from '@/convex/_generated/dataModel'
 
 export default function Home() {
   const todos = usePaginatedQuery(
@@ -12,15 +11,15 @@ export default function Home() {
     {},
     { initialNumItems: 10 },
   )
-  const todoById = useQuery(api.task.read, {
-    id: 'jd76abn5tm2455xe20afry6da16qqxqc' as Id<'task'>,
-  })
+  // const todoById = useQuery(api.task.read, {
+  //   id: 'jd76abn5tm2455xe20afry6da16qqxqc' as Id<'task'>,
+  // })
 
   const createTodo = useMutation(api.task.create)
   const updateTodo = useMutation(api.task.update)
   // const deleteTodo = useMutation(api.todo.destroy)
 
-  console.log(todos, todoById)
+  // console.log(todos, todoById)
   return (
     <div>
       <div className='flex gap-2'>
