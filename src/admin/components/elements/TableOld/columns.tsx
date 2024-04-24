@@ -9,6 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from './data-table-column-header'
 import { DataTableRowActions } from './data-table-row-actions'
 
+// skipcq: JS-0323
 export const columns: ColumnDef<any>[] = [
   {
     id: 'select',

@@ -4,9 +4,23 @@ import { fetchQuery } from 'convex/nextjs'
 import { unstable_noStore as noStore } from 'next/cache'
 
 import { api } from '@/convex/_generated/api'
+import { Id } from '@/convex/_generated/dataModel'
 
 import { tasksData } from './data'
 import { GetTasksSchema } from './validations'
+
+export async function getTask(input: { id: Id<'task'> }) {
+  noStore()
+  const { id } = input
+
+  try {
+    const data = await fetchQuery(api.task.read, { id })
+
+    return { data, error: null }
+  } catch (err) {
+    return { data: [], error: err }
+  }
+}
 
 export async function getTasks(input: GetTasksSchema) {
   noStore()

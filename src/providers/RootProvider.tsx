@@ -1,3 +1,4 @@
+import { Toaster } from '@/components/ui/toaster'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
 import ConvexClientProvider from './ConvexClientProvider'
@@ -9,8 +10,11 @@ export default function RootProvider({
   children: React.ReactNode
 }) {
   return (
-    <ConvexClientProvider>
-      <TooltipProvider>{children}</TooltipProvider>
-    </ConvexClientProvider>
+    <>
+      <ConvexClientProvider>
+        <TooltipProvider>{children}</TooltipProvider>
+      </ConvexClientProvider>
+      <Toaster />
+    </>
   )
 }
