@@ -1,4 +1,5 @@
 import { type Table as TanstackTable, flexRender } from '@tanstack/react-table'
+import { usePathname, useRouter } from 'next/navigation'
 
 import {
   Table,
@@ -31,6 +32,10 @@ export function DataTable<TData>({
   table,
   floatingBar = null,
 }: DataTableProps<TData>) {
+  // custom code
+  const router = useRouter()
+  const pathname = usePathname()
+
   return (
     <div className='w-full space-y-2.5 overflow-auto'>
       <div className='rounded-md border'>
@@ -60,7 +65,20 @@ export function DataTable<TData>({
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      style={
+                        cell.id.endsWith('id') ? { cursor: 'pointer' } : {}
+                      }
+                      // skipcq: JS-0417
+                      onClick={() => {
+                        if (cell.id.endsWith('id')) {
+                          return router.push(
+                            `${pathname}/${row.getValue('_id')}`,
+                          )
+                        }
+                        return null
+                      }}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
