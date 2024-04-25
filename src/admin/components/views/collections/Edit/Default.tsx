@@ -18,7 +18,6 @@ import {
 } from '@/admin/components/elements/Table/lib/validations'
 import { LoaderIcon } from '@/admin/components/icons'
 import AutoForm, { AutoFormSubmit } from '@/components/auto-form'
-import { Separator } from '@/components/ui/separator'
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { Task_Zod_Object } from '@/convex/task'
 import { getErrorMessage } from '@/utils/handle-error'
@@ -94,10 +93,7 @@ const DefaultEdit: React.FC<Props> = ({ task }) => {
   return task?._id || isCreatePage ? (
     // skipcq: JS-0415
     <div className='space-y-6 p-10 pb-16 md:block'>
-      <div className='space-y-4'>
-        <EditHeader isCreatePage={isCreatePage} task={task} />
-        <Separator />
-      </div>
+      <EditHeader isCreatePage={isCreatePage} task={task} />
       <div className='flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0'>
         <div className='flex-1 w-full'>
           <div className='space-y-6'>
