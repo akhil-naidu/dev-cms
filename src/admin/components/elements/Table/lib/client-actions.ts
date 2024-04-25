@@ -10,7 +10,7 @@ export function deleteTasks({
   rows,
   onSuccess,
 }: {
-  rows: Row<Doc<'task'>>[]
+  rows: Doc<'task'>[]
   onSuccess?: () => void
 }) {
   toast.promise(
@@ -18,7 +18,7 @@ export function deleteTasks({
       rows.map(
         async row =>
           await deleteTask({
-            id: row.original._id,
+            id: row._id,
           }),
       ),
     ),

@@ -1,11 +1,12 @@
 'use client'
 
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 
 const NothingFound = () => {
   const router = useRouter()
+
   return (
     <div className='flex flex-col items-center justify-center min-h-screen px-4 md:px-6'>
       <div className='max-w-xl text-center space-y-4'>

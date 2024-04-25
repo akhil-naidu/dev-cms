@@ -174,7 +174,7 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
             <DeleteTasksDialog
               open={showDeleteTaskDialog}
               onOpenChange={setShowDeleteTaskDialog}
-              tasks={[row]}
+              rows={[row.original]}
               showTrigger={false}
             />
             <DropdownMenu>
