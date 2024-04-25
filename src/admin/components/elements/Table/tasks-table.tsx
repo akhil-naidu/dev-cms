@@ -1,7 +1,5 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { use, useMemo } from 'react'
 
 import { DataTableAdvancedToolbar } from '@/admin/components/data-table/advanced/data-table-advanced-toolbar'
@@ -9,7 +7,6 @@ import { DataTable } from '@/admin/components/data-table/data-table'
 import { DataTableToolbar } from '@/admin/components/data-table/data-table-toolbar'
 import type { DataTableFilterField } from '@/admin/components/elements/Table/types'
 import { useDataTable } from '@/admin/hooks/use-data-table'
-import { buttonVariants } from '@/components/ui/button'
 import { Doc } from '@/convex/_generated/dataModel'
 import { Task_Schema } from '@/convex/task'
 
@@ -29,8 +26,6 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
   const { featureFlags } = useTasksTable()
 
   const tasks = Task_Schema
-
-  const pathname = usePathname()
 
   const { data, pageCount } = use(tasksPromise)
 
@@ -98,17 +93,6 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
           <TasksTableToolbarActions table={table} />
         </DataTableToolbar>
       )}
-      {/* Todo: It will be moved to somewhere */}
-      <div className='flex justify-end py-2'>
-        <Link
-          href={`${pathname}/create`}
-          className={buttonVariants({
-            variant: 'default',
-            className: 'w-24',
-          })}>
-          Create New
-        </Link>
-      </div>
       <DataTable
         table={table}
         floatingBar={
