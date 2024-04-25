@@ -11,18 +11,18 @@ const ListHeader = () => {
   return (
     <div className='flex items-center justify-between space-y-2'>
       <div>
-        <div>
-          <h2 className='text-2xl font-bold tracking-tight'>Tasks</h2>
-          <Link
-            href={`${pathname}/create`}
-            className={buttonVariants({
-              variant: 'default',
-              size: 'sm',
-            })}>
-            Create New
-          </Link>
-        </div>
+        <h2 className='text-2xl font-bold tracking-tight'>Tasks</h2>
         <p className='text-muted-foreground'>Manage your tasks.</p>
+      </div>
+      <div className='flex flex-col items-start h-full'>
+        <Link
+          href={`${pathname}/create`}
+          className={buttonVariants({
+            variant: 'default',
+            size: 'sm',
+          })}>
+          Create New
+        </Link>
       </div>
     </div>
   )
