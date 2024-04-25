@@ -1,103 +1,35 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
+import AutoForm, { AutoFormSubmit } from '@/components/auto-form'
 
 const formSchema = z.object({
   task: z.string().min(1).max(255),
-  completed: z.boolean(),
+  completed: z.boolean().default(true).optional(),
   email: z.string().email().min(1).max(9999999999),
+  priority: z.enum(['low', 'medium', 'high']).default('high'),
 })
 
 const MyForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    // defaultValues: {
-    //   task: 'string',
-    //   email: 'akh',
-    // },
-  })
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-  }
-
+  // const [values, setValues] = useState<Partial<z.infer<typeof formSchema>>>({})
   return (
-    <Form {...form}>
-      <form
-        noValidate
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='space-y-8'>
-        <FormField
-          control={form.control}
-          name='task'
-          // skipcq: JS-0417
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>task</FormLabel>
-              <FormControl>
-                <Input placeholder='your task' {...field} />
-              </FormControl>
-              <FormDescription>Add your task here</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name='completed'
-          // skipcq: JS-0417
-          render={({ field }) => (
-            <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-              <div className='space-y-0.5'>
-                <FormLabel className='text-base'>completed</FormLabel>
-                <FormDescription>
-                  true or false, for the done status
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name='email'
-          // skipcq: JS-0417
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>email</FormLabel>
-              <FormControl>
-                <Input type='email' placeholder='email' {...field} />
-              </FormControl>
-              <FormDescription>Enter user email</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type='submit'>Submit</Button>
-      </form>
-    </Form>
+    <div className='w-1/3 mx-auto pt-36'>
+      <AutoForm
+        formSchema={formSchema}
+        values={{
+          completed: false,
+          email: 'akhil@gmail.com',
+          priority: 'low',
+          task: 'test',
+        }}
+        // onParsedValuesChange={setValues}
+        onValuesChange={data => {
+          console.log(data)
+        }}>
+        <AutoFormSubmit>submit</AutoFormSubmit>
+      </AutoForm>
+    </div>
   )
 }
 
