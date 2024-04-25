@@ -23,6 +23,8 @@ import { Doc, Id } from '@/convex/_generated/dataModel'
 import { Task_Zod_Object } from '@/convex/task'
 import { getErrorMessage } from '@/utils/handle-error'
 
+import EditHeader from './EditHeader'
+
 interface Props {
   task?: Doc<'task'>
 }
@@ -93,9 +95,7 @@ const DefaultEdit: React.FC<Props> = ({ task }) => {
     // skipcq: JS-0415
     <div className='space-y-6 p-10 pb-16 md:block'>
       <div className='space-y-0.5'>
-        <h2 className='text-2xl font-bold tracking-tight'>
-          {isCreatePage ? 'Create New' : task?._id}
-        </h2>
+        <EditHeader isCreatePage={isCreatePage} task={task} />
       </div>
       <div className='flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0'>
         <div className='flex-1 w-full'>

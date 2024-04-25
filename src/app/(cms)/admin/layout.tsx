@@ -1,3 +1,4 @@
+import Breadcrumbs from '@/admin/components/elements/Breadcrumbs'
 import Header from '@/admin/components/elements/Header'
 import Default from '@/admin/components/templates/Default'
 
@@ -8,7 +9,7 @@ const RootLayout: React.FC<Props> = ({ children }) => {
     <Default>
       <div className='overflow-hidden flex flex-col'>
         <Header />
-
+        <Breadcrumbs />
         {children}
       </div>
     </Default>
