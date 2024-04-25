@@ -23,11 +23,11 @@ import {
 interface Props {
   maxLength?: number
   includeSegments?: string[]
-  noRedirect?: string[]
+  excludeSegmentsLinks?: string[]
 }
 
 const Breadcrumbs: React.FC<Props> = props => {
-  const { maxLength = 3, includeSegments, noRedirect = ['tasks'] } = props
+  const { maxLength = 3, includeSegments, excludeSegmentsLinks } = props
 
   const pathname = usePathname()
 
@@ -42,12 +42,12 @@ const Breadcrumbs: React.FC<Props> = props => {
         <BreadcrumbItem key={segment} className='capitalize'>
           {isLast ? (
             <BreadcrumbPage>{segment}</BreadcrumbPage>
-          ) : noRedirect?.includes(segment) ? (
-            <BreadcrumbItem className='cursor-not-allowed'>
-              {segment}
-            </BreadcrumbItem>
+          ) : excludeSegmentsLinks?.includes(segment) ? (
+            <p className='cursor-not-allowed'>{segment}</p>
           ) : (
-            <BreadcrumbLink href={href}>{segment}</BreadcrumbLink>
+            <BreadcrumbLink href={href} className='hover:underline'>
+              {segment}
+            </BreadcrumbLink>
           )}
         </BreadcrumbItem>
       )
@@ -63,7 +63,7 @@ const Breadcrumbs: React.FC<Props> = props => {
     <Breadcrumb className='pt-4 px-10'>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href='/'>
+          <BreadcrumbLink href='/admin'>
             <HomeIcon />
           </BreadcrumbLink>
         </BreadcrumbItem>
