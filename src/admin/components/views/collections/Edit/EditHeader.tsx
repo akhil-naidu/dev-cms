@@ -75,7 +75,11 @@ const EditHeader: React.FC<Props> = props => {
             variant='outline'
             // skipcq: JS-0417
             onClick={() => {
-              navigator.clipboard.writeText(task?._id || 'not able to copy')
+              navigator.clipboard
+                .writeText(task?._id || 'empty data!')
+                .catch(error => {
+                  console.error('Error copying object to clipboard:', error)
+                })
 
               setCopied(true)
             }}>
@@ -109,6 +113,17 @@ const EditHeader: React.FC<Props> = props => {
                 // skipcq: JS-0417
                 onClick={() => setShowDeleteTaskDialog(true)}>
                 Delete
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                // skipcq: JS-0417
+                onClick={() => {
+                  const jsonString = JSON.stringify(task || 'empty data!')
+
+                  navigator.clipboard.writeText(jsonString).catch(error => {
+                    console.error('Error copying object to clipboard:', error)
+                  })
+                }}>
+                Copy Data
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
