@@ -1,9 +1,12 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useTransition } from 'react'
+import { toast } from 'sonner'
 
 import { DeleteTasksDialog } from '@/admin/components/elements/Table/delete-tasks-dialog'
+import { createTask } from '@/admin/components/elements/Table/lib/actions'
+import { CreateTaskSchema } from '@/admin/components/elements/Table/lib/validations'
 import {
   CheckIcon,
   ChevronLeftIcon,
@@ -20,6 +23,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Doc } from '@/convex/_generated/dataModel'
 import { formatDate } from '@/utils/format-date'
+import { getErrorMessage } from '@/utils/handle-error'
 
 interface Props {
   task?: Doc<'task'>
@@ -30,6 +34,7 @@ const EditHeader: React.FC<Props> = props => {
 
   const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [_, startCreateTransition] = useTransition()
 
   const router = useRouter()
 
@@ -44,6 +49,26 @@ const EditHeader: React.FC<Props> = props => {
 
     return () => clearTimeout(timeout)
   }, [copied])
+
+  const handleCreate = (input: CreateTaskSchema) => {
+    startCreateTransition(() => {
+      toast.promise(
+        createTask({
+          ...input,
+        }),
+        {
+          loading: 'Creating task...',
+          success: data => {
+            router.push(data?.data?._id || './')
+            return 'Task created'
+          },
+          error: error => {
+            return getErrorMessage(error)
+          },
+        },
+      )
+    })
+  }
 
   return (
     // skipcq: JS-0415
@@ -112,6 +137,16 @@ const EditHeader: React.FC<Props> = props => {
                 // skipcq: JS-0417
                 onClick={() => setShowDeleteTaskDialog(true)}>
                 Delete
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                // skipcq: JS-0417
+                onClick={() => {
+                  if (!task) return
+
+                  const { _id, _creationTime, ...withoutSystemFileds } = task
+                  handleCreate({ ...withoutSystemFileds })
+                }}>
+                Duplicate
               </DropdownMenuItem>
               <DropdownMenuItem
                 // skipcq: JS-0417
