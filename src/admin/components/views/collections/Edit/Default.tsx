@@ -57,7 +57,7 @@ const DefaultEdit: React.FC<Props> = ({ task }) => {
                 {isUpdatePending ? (
                   <LoaderIcon className='animate-spin h-5 w-5' />
                 ) : (
-                  'Update'
+                  'Save'
                 )}
               </AutoFormSubmit>
             </AutoForm>
