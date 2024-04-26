@@ -1,7 +1,7 @@
-import Form from '@/admin/components/elements/Form'
+import Create from '@/admin/components/views/Create'
 
 const CreatePage: React.FC = () => {
-  return <Form />
+  return <Create />
 }
 
 export default CreatePage

@@ -22,12 +22,11 @@ import { Doc } from '@/convex/_generated/dataModel'
 import { formatDate } from '@/utils/format-date'
 
 interface Props {
-  isCreatePage: boolean
   task?: Doc<'task'>
 }
 
 const EditHeader: React.FC<Props> = props => {
-  const { isCreatePage, task } = props
+  const { task } = props
 
   const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -68,7 +67,7 @@ const EditHeader: React.FC<Props> = props => {
           <span className='sr-only'>Back</span>
         </Button>
         <h1 className='group flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0'>
-          {isCreatePage ? 'Create New' : task?._id}
+          {task?._id}
           <Button
             className={`h-6 w-6 ${copied ? '' : 'opacity-0'} transition-opacity group-hover:opacity-100 ml-2 duration-300 ease-in-out`}
             size='icon'
