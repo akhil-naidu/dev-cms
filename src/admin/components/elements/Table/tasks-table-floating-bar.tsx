@@ -87,10 +87,13 @@ export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
             <Select
               // skipcq: JS-0417
               onValueChange={(value: Doc<'task'>['status']) => {
+                const tasks = rows.map(row => {
+                  return { ...row.original, status: value }
+                })
+
                 startTransition(() => {
                   updateTasks({
-                    rows,
-                    status: value,
+                    rows: [...tasks],
                     onSuccess: () => table.toggleAllRowsSelected(false),
                   })
                 })
@@ -127,10 +130,16 @@ export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
             <Select
               // skipcq: JS-0417
               onValueChange={(value: string) => {
+                const tasks = rows.map(row => {
+                  return {
+                    ...row.original,
+                    priority: value as Doc<'task'>['priority'],
+                  }
+                })
+
                 startTransition(() => {
                   updateTasks({
-                    rows,
-                    priority: value as Doc<'task'>['priority'],
+                    rows: [...tasks],
                     onSuccess: () => table.toggleAllRowsSelected(false),
                   })
                 })
@@ -173,6 +182,7 @@ export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
                   // skipcq: JS-0417
                   onClick={() => {
                     const tasks = rows.map(row => row.original)
+
                     startTransition(() => {
                       deleteTasks({
                         rows: tasks,
