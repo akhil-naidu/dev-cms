@@ -3,7 +3,6 @@
 import { useTransition } from 'react'
 import { toast } from 'sonner'
 
-import NothingFound from '@/admin/components/elements/EmptyStates/NothingFound'
 import { updateTask } from '@/admin/components/elements/Table/lib/actions'
 import { type UpdateTaskSchema } from '@/admin/components/elements/Table/lib/validations'
 import { LoaderIcon } from '@/admin/components/icons'
@@ -41,7 +40,7 @@ const DefaultEdit: React.FC<Props> = ({ task }) => {
     })
   }
 
-  return task?._id ? (
+  return (
     // skipcq: JS-0415
     <div className='space-y-6 p-10 pb-16 md:block'>
       <EditHeader task={task} />
@@ -66,8 +65,6 @@ const DefaultEdit: React.FC<Props> = ({ task }) => {
         </div>
       </div>
     </div>
-  ) : (
-    <NothingFound />
   )
 }
 

@@ -132,7 +132,7 @@ const EditHeader: React.FC<Props> = props => {
       <div className='grid'>
         <h2 className='text-md tracking-tight font-extrabold'>Created At</h2>
         <p className='text-xs text-gray-500 dark:text-gray-400'>
-          {formatDate(Number(task?._creationTime))}
+          {task?._creationTime && formatDate(Number(task?._creationTime))}
         </p>
       </div>
       <Separator />

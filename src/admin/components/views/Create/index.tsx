@@ -49,7 +49,7 @@ const Create: React.FC = () => {
               formSchema={Task_Zod_Object}
               // skipcq: JS-0417
               onSubmit={handleCreate}>
-              <AutoFormSubmit>
+              <AutoFormSubmit className='m-w-24'>
                 {isCreatePending ? (
                   <LoaderIcon className='animate-spin h-5 w-5' />
                 ) : (
