@@ -41,20 +41,17 @@ export default function AutoFormEnum({
       <FormControl>
         <Select
           onValueChange={field.onChange}
-          // defaultValue={field.value}
-          value={field.value}
+          defaultValue={field.value}
           {...fieldProps}>
           <SelectTrigger className={fieldProps.className}>
             <SelectValue placeholder={fieldConfigItem.inputProps?.placeholder}>
-              {field.value !== ''
-                ? findItem(field.value)?.[1]
-                : 'Select an option'}
+              {field.value ? findItem(field.value)?.[1] : 'Select an option'}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {values.map(([value, label]) => (
               <SelectItem value={label} key={value}>
-                {value}
+                {label}
               </SelectItem>
             ))}
           </SelectContent>
