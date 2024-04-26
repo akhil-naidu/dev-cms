@@ -28,8 +28,9 @@ import { formatDate } from '@/utils/format-date'
 import { getErrorMessage } from '@/utils/handle-error'
 
 import { DeleteTasksDialog } from './delete-tasks-dialog'
-import { updateTask } from './lib/actions'
+import { createTask, updateTask } from './lib/actions'
 import { getPriorityIcon, getStatusIcon } from './lib/utils'
+import { CreateTaskSchema } from './lib/validations'
 import { UpdateTaskSheet } from './update-task-sheet'
 
 export function getColumns(): ColumnDef<Doc<'task'>>[] {
@@ -162,6 +163,26 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
         const [isUpdatePending, startUpdateTransition] = useTransition()
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = useState(false)
         const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
+        const [_, startCreateTransition] = useTransition()
+
+        const handleCreate = (input: CreateTaskSchema) => {
+          startCreateTransition(() => {
+            toast.promise(
+              createTask({
+                ...input,
+              }),
+              {
+                loading: 'Creating task...',
+                success: () => {
+                  return 'Task created'
+                },
+                error: error => {
+                  return getErrorMessage(error)
+                },
+              },
+            )
+          })
+        }
 
         return (
           // skipcq: JS-0415
@@ -192,6 +213,16 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
                   onSelect={() => setShowUpdateTaskSheet(true)}>
                   Edit
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  // skipcq: JS-0417
+                  onClick={() => {
+                    const { _id, _creationTime, ...withoutSystemFields } =
+                      row.original
+
+                    handleCreate({ ...withoutSystemFields })
+                  }}>
+                  Duplicate
+                </DropdownMenuItem>
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent>
@@ -200,11 +231,19 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
                       // skipcq: JS-0417, JS-0356
                       onValueChange={value => {
                         startUpdateTransition(() => {
+                          const {
+                            _id,
+                            _creationTime,
+                            // skipcq: JS-0356
+                            label,
+                            ...withoutSystemFields
+                          } = row.original
+
                           toast.promise(
                             updateTask({
-                              id: row.original._id,
-                              title: row.original.title,
-                              status: row.original.status,
+                              id: _id,
+                              ...withoutSystemFields,
+                              label: value as Doc<'task'>['label'],
                             }),
                             {
                               loading: 'Updating...',

@@ -1,9 +1,12 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useTransition } from 'react'
+import { toast } from 'sonner'
 
 import { DeleteTasksDialog } from '@/admin/components/elements/Table/delete-tasks-dialog'
+import { createTask } from '@/admin/components/elements/Table/lib/actions'
+import { CreateTaskSchema } from '@/admin/components/elements/Table/lib/validations'
 import {
   CheckIcon,
   ChevronLeftIcon,
@@ -20,17 +23,18 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Doc } from '@/convex/_generated/dataModel'
 import { formatDate } from '@/utils/format-date'
+import { getErrorMessage } from '@/utils/handle-error'
 
 interface Props {
-  isCreatePage: boolean
   task?: Doc<'task'>
 }
 
 const EditHeader: React.FC<Props> = props => {
-  const { isCreatePage, task } = props
+  const { task } = props
 
   const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [_, startCreateTransition] = useTransition()
 
   const router = useRouter()
 
@@ -45,6 +49,26 @@ const EditHeader: React.FC<Props> = props => {
 
     return () => clearTimeout(timeout)
   }, [copied])
+
+  const handleCreate = (input: CreateTaskSchema) => {
+    startCreateTransition(() => {
+      toast.promise(
+        createTask({
+          ...input,
+        }),
+        {
+          loading: 'Creating task...',
+          success: data => {
+            router.push(data?.data?._id || './')
+            return 'Task created'
+          },
+          error: error => {
+            return getErrorMessage(error)
+          },
+        },
+      )
+    })
+  }
 
   return (
     // skipcq: JS-0415
@@ -68,7 +92,7 @@ const EditHeader: React.FC<Props> = props => {
           <span className='sr-only'>Back</span>
         </Button>
         <h1 className='group flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0'>
-          {isCreatePage ? 'Create New' : task?._id}
+          {task?._id}
           <Button
             className={`h-6 w-6 ${copied ? '' : 'opacity-0'} transition-opacity group-hover:opacity-100 ml-2 duration-300 ease-in-out`}
             size='icon'
@@ -117,6 +141,16 @@ const EditHeader: React.FC<Props> = props => {
               <DropdownMenuItem
                 // skipcq: JS-0417
                 onClick={() => {
+                  if (!task) return
+
+                  const { _id, _creationTime, ...withoutSystemFileds } = task
+                  handleCreate({ ...withoutSystemFileds })
+                }}>
+                Duplicate
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                // skipcq: JS-0417
+                onClick={() => {
                   const jsonString = JSON.stringify(task || 'empty data!')
 
                   navigator.clipboard.writeText(jsonString).catch(error => {
@@ -133,7 +167,7 @@ const EditHeader: React.FC<Props> = props => {
       <div className='grid'>
         <h2 className='text-md tracking-tight font-extrabold'>Created At</h2>
         <p className='text-xs text-gray-500 dark:text-gray-400'>
-          {formatDate(Number(task?._creationTime))}
+          {task?._creationTime && formatDate(Number(task?._creationTime))}
         </p>
       </div>
       <Separator />

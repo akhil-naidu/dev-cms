@@ -1,10 +1,37 @@
-import { type Row } from '@tanstack/react-table'
+import { WithoutSystemFields } from 'convex/server'
 import { toast } from 'sonner'
 
 import { Doc } from '@/convex/_generated/dataModel'
 import { getErrorMessage } from '@/utils/handle-error'
 
-import { deleteTask, updateTask } from './actions'
+import { createTask, deleteTask, updateTask } from './actions'
+
+export function createTasks({
+  rows,
+  onSuccess,
+}: {
+  rows: WithoutSystemFields<Doc<'task'>>[]
+  onSuccess?: () => void
+}) {
+  toast.promise(
+    Promise.all(
+      rows.map(
+        async row =>
+          await createTask({
+            ...row,
+          }),
+      ),
+    ),
+    {
+      loading: 'Creating...',
+      success: () => {
+        onSuccess?.()
+        return 'Tasks created'
+      },
+      error: err => getErrorMessage(err),
+    },
+  )
+}
 
 export function deleteTasks({
   rows,
@@ -35,29 +62,21 @@ export function deleteTasks({
 
 export function updateTasks({
   rows,
-  label,
-  status,
-  priority,
   onSuccess,
 }: {
-  rows: Row<Doc<'task'>>[]
-  label?: Doc<'task'>['label']
-  status?: Doc<'task'>['status']
-  priority?: Doc<'task'>['priority']
+  rows: Doc<'task'>[]
   onSuccess?: () => void
 }) {
   toast.promise(
     Promise.all(
-      // skipcq: JS-0116
-      rows.map(async row =>
-        updateTask({
-          id: row.original._id,
-          title: row.original.title,
-          label,
-          status: status || row.original.status,
-          priority,
-        }),
-      ),
+      rows.map(async row => {
+        const { _id, _creationTime, ...withoutSystemFields } = row
+
+        await updateTask({
+          id: row._id,
+          ...withoutSystemFields,
+        })
+      }),
     ),
     {
       loading: 'Updating...',
