@@ -172,9 +172,10 @@ export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
                   className='size-7 border'
                   // skipcq: JS-0417
                   onClick={() => {
+                    const tasks = rows.map(row => row.original)
                     startTransition(() => {
                       deleteTasks({
-                        rows,
+                        rows: tasks,
                         onSuccess: () => table.toggleAllRowsSelected(false),
                       })
                     })

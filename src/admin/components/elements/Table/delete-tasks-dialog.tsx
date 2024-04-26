@@ -1,7 +1,7 @@
 'use client'
 
+import { LoaderIcon } from '../../icons'
 import { TrashIcon } from '@radix-ui/react-icons'
-import { type Row } from '@tanstack/react-table'
 import { useTransition } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -21,13 +21,13 @@ import { deleteTasks } from './lib/client-actions'
 
 interface DeleteTasksDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
-  tasks: Row<Doc<'task'>>[]
+  rows: Doc<'task'>[]
   onSuccess?: () => void
   showTrigger?: boolean
 }
 
 export function DeleteTasksDialog({
-  tasks,
+  rows,
   onSuccess,
   showTrigger = true,
   ...props
@@ -41,7 +41,7 @@ export function DeleteTasksDialog({
         <DialogTrigger asChild>
           <Button variant='outline' size='sm'>
             <TrashIcon className='mr-2 size-4' aria-hidden='true' />
-            Delete ({tasks.length})
+            Delete ({rows.length})
           </Button>
         </DialogTrigger>
       ) : null}
@@ -50,8 +50,8 @@ export function DeleteTasksDialog({
           <DialogTitle>Are you absolutely sure?</DialogTitle>
           <DialogDescription>
             This action cannot be undone. This will permanently delete your{' '}
-            <span className='font-medium'>{tasks.length}</span>
-            {tasks.length === 1 ? ' task' : ' tasks'} from our servers.
+            <span className='font-medium'>{rows.length}</span>
+            {rows.length === 1 ? ' task' : ' rows'} from our servers.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className='gap-2 sm:space-x-0'>
@@ -66,13 +66,17 @@ export function DeleteTasksDialog({
               onClick={() => {
                 startDeleteTransition(() => {
                   deleteTasks({
-                    rows: tasks,
+                    rows,
                     onSuccess,
                   })
                 })
               }}
               disabled={isDeletePending}>
-              Delete
+              {isDeletePending ? (
+                <LoaderIcon className='animate-spin h-5 w-5' />
+              ) : (
+                'Delete'
+              )}
             </Button>
           </DialogClose>
         </DialogFooter>

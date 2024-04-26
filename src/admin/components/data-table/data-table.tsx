@@ -67,9 +67,7 @@ export function DataTable<TData>({
                   {row.getVisibleCells().map(cell => (
                     <TableCell
                       key={cell.id}
-                      style={
-                        cell.id.endsWith('id') ? { cursor: 'pointer' } : {}
-                      }
+                      className={`${cell.id.endsWith('id') ? 'cursor-pointer hover:underline' : ''}`}
                       // skipcq: JS-0417
                       onClick={() => {
                         if (cell.id.endsWith('id')) {

@@ -1,12 +1,12 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import NothingFound from '../EmptyStates/NothingFound'
+import { usePathname } from 'next/navigation'
 
-import AutoForm, { AutoFormSubmit } from '@/components/auto-form'
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Doc } from '@/convex/_generated/dataModel'
-import { Task_Zod_Object } from '@/convex/task'
+
+import { EditForm } from './edit-form'
 
 interface Props {
   task?: Doc<'task'>
@@ -14,8 +14,6 @@ interface Props {
 
 const Form: React.FC<Props> = ({ task }) => {
   const pathname = usePathname()
-
-  const router = useRouter()
 
   const isCreatePage = pathname.split('/').pop() === 'create'
 
@@ -31,33 +29,13 @@ const Form: React.FC<Props> = ({ task }) => {
         <div className='flex-1 w-full'>
           <div className='space-y-6'>
             <Separator />
-            {/* <EditForm task={task} /> */}
-            <AutoForm formSchema={Task_Zod_Object} values={task}>
-              <AutoFormSubmit>Update</AutoFormSubmit>
-            </AutoForm>
+            <EditForm task={task} />
           </div>
         </div>
       </div>
     </div>
   ) : (
-    <div className='flex flex-col items-center justify-center min-h-screen px-4 md:px-6'>
-      <div className='max-w-xl text-center space-y-4'>
-        <h1 className='text-3xl font-bold tracking-tighter md:text-4xl'>
-          Nothing found
-        </h1>
-        <p className='text-gray-500 dark:text-gray-400'>
-          Sorry—there is nothing to correspond with your request.
-        </p>
-
-        <Button
-          type='button'
-          size='lg'
-          // skipcq: JS-0417
-          onClick={() => router.push('create')}>
-          Create New
-        </Button>
-      </div>
-    </div>
+    <NothingFound />
   )
 }
 
