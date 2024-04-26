@@ -13,13 +13,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Doc } from '@/convex/_generated/dataModel'
@@ -28,7 +23,7 @@ import { formatDate } from '@/utils/format-date'
 import { getErrorMessage } from '@/utils/handle-error'
 
 import { DeleteTasksDialog } from './delete-tasks-dialog'
-import { createTask, updateTask } from './lib/actions'
+import { createTask } from './lib/actions'
 import { getPriorityIcon, getStatusIcon } from './lib/utils'
 import { CreateTaskSchema } from './lib/validations'
 import { UpdateTaskSheet } from './update-task-sheet'
@@ -160,7 +155,7 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
     {
       id: 'actions',
       cell: function Cell({ row }) {
-        const [isUpdatePending, startUpdateTransition] = useTransition()
+        // const [isUpdatePending, startUpdateTransition] = useTransition()
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = useState(false)
         const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
         const [_, startCreateTransition] = useTransition()
@@ -223,7 +218,8 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
                   }}>
                   Duplicate
                 </DropdownMenuItem>
-                <DropdownMenuSub>
+
+                {/* <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent>
                     <DropdownMenuRadioGroup
@@ -264,7 +260,7 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
                       ))}
                     </DropdownMenuRadioGroup>
                   </DropdownMenuSubContent>
-                </DropdownMenuSub>
+                </DropdownMenuSub> */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   // skipcq: JS-0417
