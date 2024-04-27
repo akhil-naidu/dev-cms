@@ -8,29 +8,28 @@ import { DataTableToolbar } from '@/admin/components/data-table/data-table-toolb
 import type { DataTableFilterField } from '@/admin/components/elements/Table/types'
 import { useDataTable } from '@/admin/hooks/use-data-table'
 import { Doc } from '@/convex/_generated/dataModel'
-import { Task_Schema } from '@/convex/task'
+import { Collections } from '@/convex/config'
 
-import { getPriorityIcon, getStatusIcon } from './lib/utils'
+import { getTasks } from './lib/queries'
 import { getColumns } from './tasks-table-columns'
 import { TasksTableFloatingBar } from './tasks-table-floating-bar'
 import { useTasksTable } from './tasks-table-provider'
 import { TasksTableToolbarActions } from './tasks-table-toolbar-actions'
 
 interface TasksTableProps {
-  // tasksPromise: ReturnType<typeof getTasks>
-  tasksPromise: Promise<{ data: Doc<'task'>[]; pageCount: number }>
+  tasksPromise: ReturnType<typeof getTasks>
+  collection: Collections
+  // tasksPromise: Promise<{ data: Doc<'task'>[]; pageCount: number }>
 }
 
-export function TasksTable({ tasksPromise }: TasksTableProps) {
+export function TasksTable({ tasksPromise, collection }: TasksTableProps) {
   // Feature flags for showcasing some additional features. Feel free to remove them.
   const { featureFlags } = useTasksTable()
-
-  const tasks = Task_Schema
 
   const { data, pageCount } = use(tasksPromise)
 
   // Memoize the columns so they don't re-render on every render
-  const columns = useMemo(() => getColumns(), [])
+  const columns = useMemo(() => getColumns(collection), [])
 
   /**
    * This component can render either a faceted filter or a search filter based on the `options` prop.
@@ -43,31 +42,11 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
    * @prop {React.ReactNode} [icon] - An optional icon to display next to the label.
    * @prop {boolean} [withCount] - An optional boolean to display the count of the filter option.
    */
-  const filterFields: DataTableFilterField<Doc<'task'>>[] = [
+  const filterFields: DataTableFilterField<Doc<any>>[] = [
     {
       label: 'Title',
       value: 'title',
       placeholder: 'Filter titles...',
-    },
-    {
-      label: 'Status',
-      value: 'status',
-      options: Object.values(tasks.status.enum).map(status => ({
-        label: status[0]?.toUpperCase() + status.slice(1),
-        value: status,
-        icon: getStatusIcon(status),
-        withCount: true,
-      })),
-    },
-    {
-      label: 'Priority',
-      value: 'priority',
-      options: Object.values(tasks.priority.unwrap().enum).map(priority => ({
-        label: priority[0]?.toUpperCase() + priority.slice(1),
-        value: priority,
-        icon: getPriorityIcon(priority),
-        withCount: true,
-      })),
     },
   ]
 

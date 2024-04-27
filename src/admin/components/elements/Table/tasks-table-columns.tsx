@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Doc } from '@/convex/_generated/dataModel'
-import { Task_Schema } from '@/convex/task'
+import { Collections, tableConfig } from '@/convex/config'
 import { formatDate } from '@/utils/format-date'
 import { getErrorMessage } from '@/utils/handle-error'
 
@@ -26,19 +26,22 @@ import { createTask } from './lib/actions'
 import { CreateTaskSchema } from './lib/validations'
 import { UpdateTaskSheet } from './update-task-sheet'
 
-export function getColumns(): ColumnDef<Doc<'task'>>[] {
-  const tasks = Task_Schema
+export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
+  // const tasks = OrderSchema
+  const tasks = tableConfig[collection]
 
   const columnsArray = Object.entries(tasks).map(([name, types]) => {
     return {
       accessorKey: name,
-      header: ({ column }) => (
+      // TODO: fix this type issue
+      header: ({ column }: any) => (
         <DataTableColumnHeader
           column={column}
           title={name.charAt(0).toUpperCase() + name.slice(1)}
         />
       ),
-      cell: ({ row }) => {
+      // TODO: fix this type issue
+      cell: ({ row }: any) => {
         return (
           <div className='flex space-x-2'>
             <span className='max-w-[20.25rem] truncate font-medium'>

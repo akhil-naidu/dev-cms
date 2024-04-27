@@ -10,15 +10,15 @@ import { Collections } from './types'
 
 export const collections: Collections = [
   {
-    slug: 'tasks',
+    slug: 'task',
     label: 'Tasks',
-    path: '/admin/collections/tasks',
+    path: '/admin/collections/task',
     icon: <ListIcon className='h-4 w-4' />,
   },
   {
-    slug: 'orders',
+    slug: 'order',
     label: 'Orders',
-    path: '/admin/collections/orders',
+    path: '/admin/collections/order',
     icon: <ShoppingCartIcon className='h-4 w-4' />,
   },
   {

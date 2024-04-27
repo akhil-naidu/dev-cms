@@ -12,7 +12,7 @@ import {
 import { mutation, query } from './_generated/server'
 
 export const OrderSchema = {
-  orderId: z_string(),
+  title: z_string(),
   status: z_enum(['pending', 'processing', 'shipped', 'delivered', 'canceled']),
   items: z_array(z_object({ productId: z_string(), quantity: z_string() })),
   totalPrice: z_string(),

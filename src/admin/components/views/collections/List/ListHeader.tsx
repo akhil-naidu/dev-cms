@@ -16,7 +16,7 @@ import {
 import { Doc } from '@/convex/_generated/dataModel'
 
 interface Props {
-  tasks: Doc<'task'>[]
+  tasks: Doc<any>[]
 }
 
 const ListHeader: React.FC<Props> = props => {

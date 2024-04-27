@@ -7,16 +7,18 @@ import { searchParamsSchema } from '@/admin/components/elements/Table/lib/valida
 import { TasksTable } from '@/admin/components/elements/Table/tasks-table'
 import { TasksTableProvider } from '@/admin/components/elements/Table/tasks-table-provider'
 import type { SearchParams } from '@/admin/components/elements/Table/types'
+import { Collections } from '@/convex/config'
 
 export interface Props {
   searchParams: SearchParams
+  collection: Collections
 }
 
 // skipcq: JS-0116
-const DefaultList: React.FC<Props> = ({ searchParams }) => {
+const DefaultList: React.FC<Props> = ({ searchParams, collection }) => {
   const search = searchParamsSchema.parse(searchParams)
 
-  const tasksPromise = getTasks(search)
+  const tasksPromise = getTasks(search, collection)
 
   return (
     <Shell className='gap-2'>
@@ -49,7 +51,7 @@ const DefaultList: React.FC<Props> = ({ searchParams }) => {
            * Passing promises and consuming them using React.use for triggering the suspense fallback.
            * @see https://react.dev/reference/react/use
            */}
-          <TasksTable tasksPromise={tasksPromise} />
+          <TasksTable tasksPromise={tasksPromise} collection={collection} />
         </Suspense>
       </TasksTableProvider>
     </Shell>

@@ -5,6 +5,7 @@ import { unstable_noStore as noStore } from 'next/cache'
 
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 
 import { GetTasksSchema } from './validations'
 
@@ -21,7 +22,7 @@ export async function getTask(input: { id: Id<'task'> }) {
   }
 }
 
-export async function getTasks(input: GetTasksSchema) {
+export async function getTasks(input: GetTasksSchema, collection: Collections) {
   noStore()
   // skipcq: JS-0356
   const { page, per_page, sort, title, status, priority, operator, from, to } =
@@ -29,7 +30,7 @@ export async function getTasks(input: GetTasksSchema) {
 
   try {
     // const data = (await tasksData) as Doc<'task'>[]
-    const data = await fetchQuery(api.task.paginate, {
+    const data = await fetchQuery(api[collection].paginate, {
       paginationOpts: {
         numItems: per_page,
         cursor: null,
