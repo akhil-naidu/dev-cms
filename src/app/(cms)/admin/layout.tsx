@@ -9,7 +9,7 @@ const RootLayout: React.FC<Props> = ({ children }) => {
     <Default>
       <div className='overflow-hidden flex flex-col'>
         <Header />
-        <Breadcrumbs maxLength={3} excludeSegmentsLinks={['collections']} />
+        <Breadcrumbs maxLength={4} excludeSegmentsLinks={['collections']} />
         {children}
       </div>
     </Default>
