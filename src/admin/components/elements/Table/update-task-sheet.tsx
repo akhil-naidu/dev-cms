@@ -33,6 +33,7 @@ import {
 } from '@/components/ui/sheet'
 import { Textarea } from '@/components/ui/textarea'
 import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 import { Task_Schema } from '@/convex/task'
 import { getErrorMessage } from '@/utils/handle-error'
 
@@ -41,7 +42,7 @@ import { type UpdateTaskSchema, updateTaskSchema } from './lib/validations'
 
 interface UpdateTaskSheetProps
   extends React.ComponentPropsWithRef<typeof Sheet> {
-  task: Doc<'task'>
+  task: Doc<Collections>
 }
 
 export function UpdateTaskSheet({

@@ -262,7 +262,7 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
                             updateTask({
                               id: _id,
                               ...withoutSystemFields,
-                              label: value as Doc<'task'>['label'],
+                              label: value as Doc<Collections>['label'],
                             }),
                             {
                               loading: 'Updating...',

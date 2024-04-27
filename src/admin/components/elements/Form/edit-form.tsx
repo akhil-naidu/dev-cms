@@ -33,11 +33,12 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { Doc, Id } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 import { Task_Schema } from '@/convex/task'
 import { getErrorMessage } from '@/utils/handle-error'
 
 interface Props {
-  task?: Doc<'task'>
+  task?: Doc<Collections>
 }
 
 export function EditForm({ task }: Props) {
@@ -54,19 +55,13 @@ export function EditForm({ task }: Props) {
 
   const form = useForm<UpdateTaskSchema>({
     resolver: zodResolver(updateTaskSchema),
-    defaultValues: {
-      title: task?.title ?? '',
-      label: task?.label,
-      status: task?.status,
-      priority: task?.priority,
-    },
   })
 
   const handleUpdate = (input: UpdateTaskSchema) => {
     startUpdateTransition(() => {
       toast.promise(
         updateTask({
-          id: task?._id as Id<'task'>,
+          id: task?._id as Id<Collections>,
           ...input,
         }),
         {

@@ -23,12 +23,13 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 import { Task_Schema } from '@/convex/task'
 
 import { deleteTasks, updateTasks } from './lib/client-actions'
 
 interface TasksTableFloatingBarProps {
-  table: Table<Doc<'task'>>
+  table: Table<Doc<Collections>>
 }
 
 export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
@@ -86,7 +87,7 @@ export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
           <div className='flex items-center gap-1.5'>
             <Select
               // skipcq: JS-0417
-              onValueChange={(value: Doc<'task'>['status']) => {
+              onValueChange={(value: Doc<Collections>['status']) => {
                 const tasks = rows.map(row => {
                   return { ...row.original, status: value }
                 })
@@ -133,7 +134,7 @@ export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
                 const tasks = rows.map(row => {
                   return {
                     ...row.original,
-                    priority: value as Doc<'task'>['priority'],
+                    priority: value as Doc<Collections>['priority'],
                   }
                 })
 

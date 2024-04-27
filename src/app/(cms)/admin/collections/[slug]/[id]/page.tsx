@@ -1,14 +1,17 @@
 import EditView from '@/admin/components/views/collections/Edit'
 import { Id } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 
 interface PageProps {
   params: {
-    id: Id<'task'>
+    id: Id<Collections>
+    slug: Collections
   }
 }
 
 const EditPage: React.FC<PageProps> = ({ params }) => {
-  return <EditView id={params.id} />
+  console.log(params.slug)
+  return <EditView id={params.id} collection={params.slug} />
 }
 
 export default EditPage

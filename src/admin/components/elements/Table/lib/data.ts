@@ -1,8 +1,9 @@
 import { Doc, Id } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 
-export const tasksData: Doc<'task'>[] = [
+export const tasksData: Doc<Collections>[] = [
   {
-    _id: '1' as Id<'task'>,
+    _id: '1' as Id<Collections>,
     title: 'Task 1',
     status: 'todo',
     priority: 'high',

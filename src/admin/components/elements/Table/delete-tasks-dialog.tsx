@@ -16,12 +16,13 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 
 import { deleteTasks } from './lib/client-actions'
 
 interface DeleteTasksDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
-  rows: Doc<'task'>[]
+  rows: Doc<Collections>[]
   onSuccess?: () => void
   showTrigger?: boolean
 }

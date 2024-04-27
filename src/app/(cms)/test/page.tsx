@@ -12,7 +12,7 @@ export default function Home() {
     { initialNumItems: 10 },
   )
   // const todoById = useQuery(api.task.read, {
-  //   id: 'jd76abn5tm2455xe20afry6da16qqxqc' as Id<'task'>,
+  //   id: 'jd76abn5tm2455xe20afry6da16qqxqc' as Id<Collections>,
   // })
 
   const createTodo = useMutation(api.task.create)

@@ -22,11 +22,12 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
 import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 import { formatDate } from '@/utils/format-date'
 import { getErrorMessage } from '@/utils/handle-error'
 
 interface Props {
-  task?: Doc<'task'>
+  task?: Doc<Collections>
 }
 
 const EditHeader: React.FC<Props> = props => {
@@ -77,7 +78,7 @@ const EditHeader: React.FC<Props> = props => {
         <DeleteTasksDialog
           open={showDeleteTaskDialog}
           onOpenChange={setShowDeleteTaskDialog}
-          rows={[task] as Doc<'task'>[]}
+          rows={[task] as Doc<Collections>[]}
           showTrigger={false}
           // skipcq: JS-0417
           onSuccess={onSuccess}
@@ -138,7 +139,7 @@ const EditHeader: React.FC<Props> = props => {
                 onClick={() => setShowDeleteTaskDialog(true)}>
                 Delete
               </DropdownMenuItem>
-              <DropdownMenuItem
+              {/* <DropdownMenuItem
                 // skipcq: JS-0417
                 onClick={() => {
                   if (!task) return
@@ -147,7 +148,7 @@ const EditHeader: React.FC<Props> = props => {
                   handleCreate({ ...withoutSystemFileds })
                 }}>
                 Duplicate
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem
                 // skipcq: JS-0417
                 onClick={() => {

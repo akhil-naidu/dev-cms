@@ -5,13 +5,14 @@ import { type Table } from '@tanstack/react-table'
 
 import { Button } from '@/components/ui/button'
 import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 
 import { CreateTaskDialog } from './create-task-dialog'
 import { DeleteTasksDialog } from './delete-tasks-dialog'
 import { exportTableToCSV } from './lib/export'
 
 interface TasksTableToolbarActionsProps {
-  table: Table<Doc<'task'>>
+  table: Table<Doc<Collections>>
 }
 
 export function TasksTableToolbarActions({

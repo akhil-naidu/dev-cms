@@ -10,13 +10,14 @@ import {
 } from '@radix-ui/react-icons'
 
 import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 
 /**
  * Returns the appropriate status icon based on the provided status.
  * @param status - The status of the task.
  * @returns A React component representing the status icon.
  */
-export function getStatusIcon(status: Doc<'task'>['status']) {
+export function getStatusIcon(status: Doc<Collections>['status']) {
   const statusIcons = {
     canceled: CrossCircledIcon,
     backlog: ArrowDownIcon, // Example icon, you can replace it with the appropriate one
@@ -33,7 +34,7 @@ export function getStatusIcon(status: Doc<'task'>['status']) {
  * @param priority - The priority of the task.
  * @returns A React component representing the priority icon.
  */
-export function getPriorityIcon(priority: Doc<'task'>['priority']) {
+export function getPriorityIcon(priority: Doc<Collections>['priority']) {
   const priorityIcons = {
     low: ArrowDownIcon,
     medium: ArrowRightIcon,

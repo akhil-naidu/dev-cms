@@ -19,7 +19,7 @@ import { TasksTableToolbarActions } from './tasks-table-toolbar-actions'
 interface TasksTableProps {
   tasksPromise: ReturnType<typeof getTasks>
   collection: Collections
-  // tasksPromise: Promise<{ data: Doc<'task'>[]; pageCount: number }>
+  // tasksPromise: Promise<{ data: Doc<Collections>[]; pageCount: number }>
 }
 
 export function TasksTable({ tasksPromise, collection }: TasksTableProps) {

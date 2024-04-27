@@ -2,6 +2,7 @@ import { WithoutSystemFields } from 'convex/server'
 import { toast } from 'sonner'
 
 import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 import { getErrorMessage } from '@/utils/handle-error'
 
 import { createTask, deleteTask, updateTask } from './actions'
@@ -10,7 +11,7 @@ export function createTasks({
   rows,
   onSuccess,
 }: {
-  rows: WithoutSystemFields<Doc<'task'>>[]
+  rows: WithoutSystemFields<Doc<Collections>>[]
   onSuccess?: () => void
 }) {
   toast.promise(
@@ -37,7 +38,7 @@ export function deleteTasks({
   rows,
   onSuccess,
 }: {
-  rows: Doc<'task'>[]
+  rows: Doc<Collections>[]
   onSuccess?: () => void
 }) {
   toast.promise(
@@ -64,7 +65,7 @@ export function updateTasks({
   rows,
   onSuccess,
 }: {
-  rows: Doc<'task'>[]
+  rows: Doc<Collections>[]
   onSuccess?: () => void
 }) {
   toast.promise(

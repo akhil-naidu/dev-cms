@@ -5,11 +5,12 @@ import { usePathname } from 'next/navigation'
 
 import { Separator } from '@/components/ui/separator'
 import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 
 import { EditForm } from './edit-form'
 
 interface Props {
-  task?: Doc<'task'>
+  task?: Doc<Collections>
 }
 
 const Form: React.FC<Props> = ({ task }) => {

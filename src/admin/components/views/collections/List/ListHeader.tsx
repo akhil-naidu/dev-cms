@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 
 interface Props {
   tasks: Doc<any>[]
@@ -32,7 +33,7 @@ const ListHeader: React.FC<Props> = props => {
       <DeleteTasksDialog
         open={showDeleteTaskDialog}
         onOpenChange={setShowDeleteTaskDialog}
-        rows={[...tasks] as Doc<'task'>[]}
+        rows={[...tasks] as Doc<Collections>[]}
         showTrigger={false}
       />
       <div>

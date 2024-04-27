@@ -9,12 +9,17 @@ import { Collections } from '@/convex/config'
 
 import { GetTasksSchema } from './validations'
 
-export async function getTask(input: { id: Id<'task'> }) {
+export async function getTask(input: {
+  id: Id<Collections>
+  collection: Collections
+}) {
   noStore()
-  const { id } = input
+  const { id, collection } = input
 
   try {
-    const data = await fetchQuery(api.task.read, { id })
+    // skipcq: JS-0295
+    // @ts-expect-error
+    const data = await fetchQuery(api[collection].read, { id })
 
     return { data, error: null }
   } catch (err) {
@@ -29,7 +34,7 @@ export async function getTasks(input: GetTasksSchema, collection: Collections) {
     input
 
   try {
-    // const data = (await tasksData) as Doc<'task'>[]
+    // const data = (await tasksData) as Doc<Collections>[]
     const data = await fetchQuery(api[collection].paginate, {
       paginationOpts: {
         numItems: per_page,
