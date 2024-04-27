@@ -60,7 +60,7 @@ function AutoForm<SchemaType extends ZodObjectOrWrapped>({
 
   const form = useForm<z.infer<typeof objectFormSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: valuesProp ?? undefined,
+    defaultValues: valuesProp ?? defaultValues ?? undefined,
     // values: valuesProp,
   })
 

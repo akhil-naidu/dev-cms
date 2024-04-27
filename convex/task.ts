@@ -1,3 +1,4 @@
+// task.ts
 import { Table, crud } from 'convex-helpers/server'
 import { zodToConvexFields } from 'convex-helpers/server/zod'
 import {
@@ -17,7 +18,7 @@ export const Task_Schema = {
   label: z_enum(['bug', 'feature', 'enhancement', 'documentation']).optional(),
   priority: z_enum(['low', 'medium', 'high']).optional(),
   array: z_array(z_object({ name: z_string(), age: z_string() })),
-  completed: z_boolean().optional(),
+  completed: z_boolean().default(false).optional(),
 }
 
 export const Task = Table('task', zodToConvexFields(Task_Schema))

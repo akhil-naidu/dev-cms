@@ -6,20 +6,14 @@ import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
 import { DataTableColumnHeader } from '@/admin/components/data-table/data-table-column-header'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Doc } from '@/convex/_generated/dataModel'
@@ -28,13 +22,33 @@ import { formatDate } from '@/utils/format-date'
 import { getErrorMessage } from '@/utils/handle-error'
 
 import { DeleteTasksDialog } from './delete-tasks-dialog'
-import { createTask, updateTask } from './lib/actions'
-import { getPriorityIcon, getStatusIcon } from './lib/utils'
+import { createTask } from './lib/actions'
 import { CreateTaskSchema } from './lib/validations'
 import { UpdateTaskSheet } from './update-task-sheet'
 
 export function getColumns(): ColumnDef<Doc<'task'>>[] {
   const tasks = Task_Schema
+
+  const columnsArray = Object.entries(tasks).map(([name, types]) => {
+    return {
+      accessorKey: name,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={name.charAt(0).toUpperCase() + name.slice(1)}
+        />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className='flex space-x-2'>
+            <span className='max-w-[20.25rem] truncate font-medium'>
+              {JSON.stringify(row.getValue(name))}
+            </span>
+          </div>
+        )
+      },
+    }
+  })
 
   return [
     {
@@ -74,82 +88,83 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
       enableSorting: false,
       enableHiding: false,
     },
-    {
-      accessorKey: 'title',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title='Title' />
-      ),
-      cell: ({ row }) => {
-        const label = Object.values(tasks.label.unwrap().enum).find(
-          label => label === row.original.label,
-        )
+    ...columnsArray,
+    // {
+    //   accessorKey: 'title',
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title='Title' />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const label = Object.values(tasks.label.unwrap().enum).find(
+    //       label => label === row.original.label,
+    //     )
 
-        return (
-          <div className='flex space-x-2'>
-            {label && <Badge variant='outline'>{label}</Badge>}
-            <span className='max-w-[31.25rem] truncate font-medium'>
-              {row.getValue('title')}
-            </span>
-          </div>
-        )
-      },
-    },
-    {
-      accessorKey: 'status',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title='Status' />
-      ),
-      cell: ({ row }) => {
-        const status = Object.values(tasks.status.enum).find(
-          status => status === row.original.status,
-        )
+    //     return (
+    //       <div className='flex space-x-2'>
+    //         {label && <Badge variant='outline'>{row.getValue('label')}</Badge>}
+    //         <span className='max-w-[31.25rem] truncate font-medium'>
+    //           {row.getValue('title')}
+    //         </span>
+    //       </div>
+    //     )
+    //   },
+    // },
+    // {
+    //   accessorKey: 'status',
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title='Status' />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const status = Object.values(tasks.status.enum).find(
+    //       status => status === row.original.status,
+    //     )
 
-        if (!status) return null
+    //     if (!status) return null
 
-        const Icon = getStatusIcon(status)
+    //     const Icon = getStatusIcon(status)
 
-        return (
-          <div className='flex w-[6.25rem] items-center'>
-            <Icon
-              className='mr-2 size-4 text-muted-foreground'
-              aria-hidden='true'
-            />
-            <span className='capitalize'>{status}</span>
-          </div>
-        )
-      },
-      filterFn: (row, id, value) => {
-        return Array.isArray(value) && value.includes(row.getValue(id))
-      },
-    },
-    {
-      accessorKey: 'priority',
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title='Priority' />
-      ),
-      cell: ({ row }) => {
-        const priority = Object.values(tasks.priority.unwrap().enum).find(
-          priority => priority === row.original.priority,
-        )
+    //     return (
+    //       <div className='flex w-[6.25rem] items-center'>
+    //         <Icon
+    //           className='mr-2 size-4 text-muted-foreground'
+    //           aria-hidden='true'
+    //         />
+    //         <span className='capitalize'>{row.getValue('status')}</span>
+    //       </div>
+    //     )
+    //   },
+    //   filterFn: (row, id, value) => {
+    //     return Array.isArray(value) && value.includes(row.getValue(id))
+    //   },
+    // },
+    // {
+    //   accessorKey: 'priority',
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title='Priority' />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const priority = Object.values(tasks.priority.unwrap().enum).find(
+    //       priority => priority === row.original.priority,
+    //     )
 
-        if (!priority) return null
+    //     if (!priority) return null
 
-        const Icon = getPriorityIcon(priority)
+    //     const Icon = getPriorityIcon(priority)
 
-        return (
-          <div className='flex items-center'>
-            <Icon
-              className='mr-2 size-4 text-muted-foreground'
-              aria-hidden='true'
-            />
-            <span className='capitalize'>{priority}</span>
-          </div>
-        )
-      },
-      filterFn: (row, id, value) => {
-        return Array.isArray(value) && value.includes(row.getValue(id))
-      },
-    },
+    //     return (
+    //       <div className='flex items-center'>
+    //         <Icon
+    //           className='mr-2 size-4 text-muted-foreground'
+    //           aria-hidden='true'
+    //         />
+    //         <span className='capitalize'>{priority}</span>
+    //       </div>
+    //     )
+    //   },
+    //   filterFn: (row, id, value) => {
+    //     return Array.isArray(value) && value.includes(row.getValue(id))
+    //   },
+    // },
     {
       accessorKey: '_creationTime',
       header: ({ column }) => (
@@ -160,7 +175,7 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
     {
       id: 'actions',
       cell: function Cell({ row }) {
-        const [isUpdatePending, startUpdateTransition] = useTransition()
+        // const [isUpdatePending, startUpdateTransition] = useTransition()
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = useState(false)
         const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
         const [_, startCreateTransition] = useTransition()
@@ -223,7 +238,8 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
                   }}>
                   Duplicate
                 </DropdownMenuItem>
-                <DropdownMenuSub>
+
+                {/* <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent>
                     <DropdownMenuRadioGroup
@@ -264,7 +280,7 @@ export function getColumns(): ColumnDef<Doc<'task'>>[] {
                       ))}
                     </DropdownMenuRadioGroup>
                   </DropdownMenuSubContent>
-                </DropdownMenuSub>
+                </DropdownMenuSub> */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   // skipcq: JS-0417
