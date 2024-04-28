@@ -28,11 +28,11 @@ import { Task_Schema } from '@/convex/task'
 
 import { deleteTasks, updateTasks } from './lib/client-actions'
 
-interface TasksTableFloatingBarProps {
+interface TableFloatingBarProps {
   table: Table<Doc<Collections>>
 }
 
-export function TasksTableFloatingBar({ table }: TasksTableFloatingBarProps) {
+export function TableFloatingBar({ table }: TableFloatingBarProps) {
   const rows = table.getFilteredSelectedRowModel().rows
 
   const [isPending, startTransition] = useTransition()

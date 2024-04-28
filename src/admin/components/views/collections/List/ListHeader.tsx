@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-import { DeleteTasksDialog } from '@/admin/components/elements/Table/delete-tasks-dialog'
+import { DeleteDialog } from '@/admin/components/elements/Table/delete-dialog'
 import { MoreVerticalIcon } from '@/admin/components/icons'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
@@ -30,7 +30,7 @@ const ListHeader: React.FC<Props> = props => {
   return (
     // skipcq: JS-0415
     <div className='flex items-center justify-between space-y-2'>
-      <DeleteTasksDialog
+      <DeleteDialog
         open={showDeleteTaskDialog}
         onOpenChange={setShowDeleteTaskDialog}
         rows={[...tasks] as Doc<Collections>[]}

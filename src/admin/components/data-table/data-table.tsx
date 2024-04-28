@@ -23,7 +23,7 @@ interface DataTableProps<TData> {
    * The floating bar to render at the bottom of the table on row selection.
    * @default null
    * @type React.ReactNode | null
-   * @example floatingBar={<TasksTableFloatingBar table={table} />}
+   * @example floatingBar={<TableFloatingBar table={table} />}
    */
   floatingBar?: React.ReactNode | null
 }

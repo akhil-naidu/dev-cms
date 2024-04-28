@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
-import { DeleteTasksDialog } from '@/admin/components/elements/Table/delete-tasks-dialog'
+import { DeleteDialog } from '@/admin/components/elements/Table/delete-dialog'
 import { createTask } from '@/admin/components/elements/Table/lib/actions'
 import { CreateTaskSchema } from '@/admin/components/elements/Table/lib/validations'
 import {
@@ -75,7 +75,7 @@ const EditHeader: React.FC<Props> = props => {
     // skipcq: JS-0415
     <div className='space-y-4 pb-4'>
       <div className='flex items-center gap-4'>
-        <DeleteTasksDialog
+        <DeleteDialog
           open={showDeleteTaskDialog}
           onOpenChange={setShowDeleteTaskDialog}
           rows={[task] as Doc<Collections>[]}

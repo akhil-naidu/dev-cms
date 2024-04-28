@@ -4,8 +4,8 @@ import { DataTableSkeleton } from '@/admin/components/data-table/data-table-skel
 import { Shell } from '@/admin/components/elements/Shell'
 import { getTasks } from '@/admin/components/elements/Table/lib/queries'
 import { searchParamsSchema } from '@/admin/components/elements/Table/lib/validations'
-import { TasksTable } from '@/admin/components/elements/Table/tasks-table'
-import { TasksTableProvider } from '@/admin/components/elements/Table/tasks-table-provider'
+import { Table } from '@/admin/components/elements/Table/table'
+import { TableProvider } from '@/admin/components/elements/Table/table-provider'
 import type { SearchParams } from '@/admin/components/elements/Table/types'
 import { Collections } from '@/convex/config'
 
@@ -23,10 +23,10 @@ const DefaultList: React.FC<Props> = ({ searchParams, collection }) => {
   return (
     <Shell className='gap-2'>
       {/**
-       * The `TasksTableProvider` is use to enable some feature flags for the `TasksTable` component.
-       * Feel free to remove this, as it's not required for the `TasksTable` component to work.
+       * The `TableProvider` is use to enable some feature flags for the `Table` component.
+       * Feel free to remove this, as it's not required for the `Table` component to work.
        */}
-      <TasksTableProvider>
+      <TableProvider>
         {/**
          * The `DateRangePicker` component is used to render the date range picker UI.
          * It is used to filter the tasks based on the selected date range it was created at.
@@ -51,9 +51,9 @@ const DefaultList: React.FC<Props> = ({ searchParams, collection }) => {
            * Passing promises and consuming them using React.use for triggering the suspense fallback.
            * @see https://react.dev/reference/react/use
            */}
-          <TasksTable tasksPromise={tasksPromise} collection={collection} />
+          <Table tasksPromise={tasksPromise} collection={collection} />
         </Suspense>
-      </TasksTableProvider>
+      </TableProvider>
     </Shell>
   )
 }

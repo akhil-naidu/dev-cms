@@ -40,7 +40,7 @@ import { getErrorMessage } from '@/utils/handle-error'
 import { createTask } from './lib/actions'
 import { type CreateTaskSchema, createTaskSchema } from './lib/validations'
 
-export function CreateTaskDialog() {
+export const CreateDialog = () => {
   const [open, setOpen] = useState(false)
   const [isCreatePending, startCreateTransition] = useTransition()
 
@@ -50,7 +50,7 @@ export function CreateTaskDialog() {
     resolver: zodResolver(createTaskSchema),
   })
 
-  function onSubmit(input: CreateTaskSchema) {
+  const onSubmit = (input: CreateTaskSchema) => {
     startCreateTransition(() => {
       toast.promise(
         createTask({

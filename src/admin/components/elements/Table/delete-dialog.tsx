@@ -20,19 +20,19 @@ import { Collections } from '@/convex/config'
 
 import { deleteTasks } from './lib/client-actions'
 
-interface DeleteTasksDialogProps
+interface DeleteDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
   rows: Doc<Collections>[]
   onSuccess?: () => void
   showTrigger?: boolean
 }
 
-export function DeleteTasksDialog({
+export function DeleteDialog({
   rows,
   onSuccess,
   showTrigger = true,
   ...props
-}: DeleteTasksDialogProps) {
+}: DeleteDialogProps) {
   const [isDeletePending, startDeleteTransition] = useTransition()
 
   return (

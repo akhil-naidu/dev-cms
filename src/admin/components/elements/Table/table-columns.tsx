@@ -21,7 +21,7 @@ import { Collections, tableConfig } from '@/convex/config'
 import { formatDate } from '@/utils/format-date'
 import { getErrorMessage } from '@/utils/handle-error'
 
-import { DeleteTasksDialog } from './delete-tasks-dialog'
+import { DeleteDialog } from './delete-dialog'
 import { createTask } from './lib/actions'
 import { CreateTaskSchema } from './lib/validations'
 import { UpdateTaskSheet } from './update-task-sheet'
@@ -210,7 +210,7 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
               onOpenChange={setShowUpdateTaskSheet}
               task={row.original}
             />
-            <DeleteTasksDialog
+            <DeleteDialog
               open={showDeleteTaskDialog}
               onOpenChange={setShowDeleteTaskDialog}
               rows={[row.original]}

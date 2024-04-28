@@ -11,20 +11,20 @@ import { Doc } from '@/convex/_generated/dataModel'
 import { Collections } from '@/convex/config'
 
 import { getTasks } from './lib/queries'
-import { getColumns } from './tasks-table-columns'
-import { TasksTableFloatingBar } from './tasks-table-floating-bar'
-import { useTasksTable } from './tasks-table-provider'
-import { TasksTableToolbarActions } from './tasks-table-toolbar-actions'
+import { getColumns } from './table-columns'
+import { TableFloatingBar } from './table-floating-bar'
+import { useTable } from './table-provider'
+import { TableToolbarActions } from './table-toolbar-actions'
 
-interface TasksTableProps {
+interface TableProps {
   tasksPromise: ReturnType<typeof getTasks>
   collection: Collections
   // tasksPromise: Promise<{ data: Doc<Collections>[]; pageCount: number }>
 }
 
-export function TasksTable({ tasksPromise, collection }: TasksTableProps) {
+export function Table({ tasksPromise, collection }: TableProps) {
   // Feature flags for showcasing some additional features. Feel free to remove them.
-  const { featureFlags } = useTasksTable()
+  const { featureFlags } = useTable()
 
   const { data, pageCount } = use(tasksPromise)
 
@@ -65,18 +65,18 @@ export function TasksTable({ tasksPromise, collection }: TasksTableProps) {
     <div className='w-full space-y-2.5 overflow-auto'>
       {featureFlags.includes('advancedFilter') ? (
         <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-          <TasksTableToolbarActions table={table} />
+          <TableToolbarActions table={table} />
         </DataTableAdvancedToolbar>
       ) : (
         <DataTableToolbar table={table} filterFields={filterFields}>
-          <TasksTableToolbarActions table={table} />
+          <TableToolbarActions table={table} />
         </DataTableToolbar>
       )}
       <DataTable
         table={table}
         floatingBar={
           featureFlags.includes('floatingBar') ? (
-            <TasksTableFloatingBar table={table} />
+            <TableFloatingBar table={table} />
           ) : null
         }
       />

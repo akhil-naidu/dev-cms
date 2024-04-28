@@ -7,21 +7,19 @@ import { Button } from '@/components/ui/button'
 import { Doc } from '@/convex/_generated/dataModel'
 import { Collections } from '@/convex/config'
 
-import { CreateTaskDialog } from './create-task-dialog'
-import { DeleteTasksDialog } from './delete-tasks-dialog'
+import { CreateDialog } from './create-dialog'
+import { DeleteDialog } from './delete-dialog'
 import { exportTableToCSV } from './lib/export'
 
-interface TasksTableToolbarActionsProps {
+interface TableToolbarActionsProps {
   table: Table<Doc<Collections>>
 }
 
-export function TasksTableToolbarActions({
-  table,
-}: TasksTableToolbarActionsProps) {
+export const TableToolbarActions = ({ table }: TableToolbarActionsProps) => {
   return (
     <div className='flex items-center gap-2'>
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-        <DeleteTasksDialog
+        <DeleteDialog
           rows={table
             .getFilteredSelectedRowModel()
             .rows.map(row => row.original)}
@@ -29,7 +27,7 @@ export function TasksTableToolbarActions({
           onSuccess={() => table.toggleAllPageRowsSelected(false)}
         />
       ) : null}
-      <CreateTaskDialog />
+      <CreateDialog />
       <Button
         variant='outline'
         size='sm'
