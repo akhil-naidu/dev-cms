@@ -26,7 +26,7 @@ import { Doc } from '@/convex/_generated/dataModel'
 import { Collections } from '@/convex/config'
 import { Task_Schema } from '@/convex/task'
 
-import { deleteTasks, updateTasks } from './lib/client-actions'
+import { deleteDocuments, updateDocuments } from './lib/client-actions'
 
 interface TableFloatingBarProps {
   table: Table<Doc<Collections>>
@@ -93,7 +93,7 @@ export function TableFloatingBar({ table }: TableFloatingBarProps) {
                 })
 
                 startTransition(() => {
-                  updateTasks({
+                  updateDocuments({
                     rows: [...tasks],
                     onSuccess: () => table.toggleAllRowsSelected(false),
                   })
@@ -139,7 +139,7 @@ export function TableFloatingBar({ table }: TableFloatingBarProps) {
                 })
 
                 startTransition(() => {
-                  updateTasks({
+                  updateDocuments({
                     rows: [...tasks],
                     onSuccess: () => table.toggleAllRowsSelected(false),
                   })
@@ -185,7 +185,7 @@ export function TableFloatingBar({ table }: TableFloatingBarProps) {
                     const tasks = rows.map(row => row.original)
 
                     startTransition(() => {
-                      deleteTasks({
+                      deleteDocuments({
                         rows: tasks,
                         onSuccess: () => table.toggleAllRowsSelected(false),
                       })

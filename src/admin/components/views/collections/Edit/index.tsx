@@ -1,5 +1,5 @@
 import NothingFound from '@/admin/components/elements/EmptyStates/NothingFound'
-import { getTask } from '@/admin/components/elements/Table/lib/queries'
+import { getDocument } from '@/admin/components/elements/Table/lib/queries'
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { Collections } from '@/convex/config'
 
@@ -13,7 +13,7 @@ interface Props {
 const EditView: React.FC<Props> = async props => {
   const { id, collection } = props
 
-  const taskData = await getTask({ collection, id })
+  const taskData = await getDocument({ collection, id })
 
   return taskData.data ? (
     <DefaultEdit

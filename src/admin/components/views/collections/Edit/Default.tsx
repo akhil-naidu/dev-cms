@@ -4,7 +4,7 @@ import { useTransition } from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { updateTask } from '@/admin/components/elements/Table/lib/actions'
+import { updateDocument } from '@/admin/components/elements/Table/lib/actions'
 import { type UpdateTaskSchema } from '@/admin/components/elements/Table/lib/validations'
 import { LoaderIcon } from '@/admin/components/icons'
 import AutoForm, { AutoFormSubmit } from '@/components/auto-form'
@@ -27,7 +27,7 @@ const DefaultEdit: React.FC<Props> = ({ task, collection }) => {
   const handleUpdate = (input: UpdateTaskSchema) => {
     startUpdateTransition(() => {
       toast.promise(
-        updateTask({
+        updateDocument({
           id: task?._id as Id<Collections>,
           ...input,
         }),

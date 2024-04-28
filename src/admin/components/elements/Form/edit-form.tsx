@@ -1,14 +1,14 @@
 'use client'
 
 import { LoaderIcon } from '../../icons'
-import { createTask } from '../Table/lib/actions'
+import { createDocument } from '../Table/lib/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { updateTask } from '@/admin/components/elements/Table/lib/actions'
+import { updateDocument } from '@/admin/components/elements/Table/lib/actions'
 import {
   CreateTaskSchema,
   type UpdateTaskSchema,
@@ -60,7 +60,7 @@ export function EditForm({ task }: Props) {
   const handleUpdate = (input: UpdateTaskSchema) => {
     startUpdateTransition(() => {
       toast.promise(
-        updateTask({
+        updateDocument({
           id: task?._id as Id<Collections>,
           ...input,
         }),
@@ -80,7 +80,7 @@ export function EditForm({ task }: Props) {
   function handleCreate(input: CreateTaskSchema) {
     startCreateTransition(() => {
       toast.promise(
-        createTask({
+        createDocument({
           ...input,
         }),
         {

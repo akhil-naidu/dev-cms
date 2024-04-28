@@ -10,14 +10,14 @@ import { useDataTable } from '@/admin/hooks/use-data-table'
 import { Doc } from '@/convex/_generated/dataModel'
 import { Collections } from '@/convex/config'
 
-import { getTasks } from './lib/queries'
+import { getDocuments } from './lib/queries'
 import { getColumns } from './table-columns'
 import { TableFloatingBar } from './table-floating-bar'
 import { useTable } from './table-provider'
 import { TableToolbarActions } from './table-toolbar-actions'
 
 interface TableProps {
-  tasksPromise: ReturnType<typeof getTasks>
+  tasksPromise: ReturnType<typeof getDocuments>
   collection: Collections
   // tasksPromise: Promise<{ data: Doc<Collections>[]; pageCount: number }>
 }

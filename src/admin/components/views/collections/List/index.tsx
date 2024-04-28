@@ -1,4 +1,4 @@
-import { getTasks } from '@/admin/components/elements/Table/lib/queries'
+import { getDocuments } from '@/admin/components/elements/Table/lib/queries'
 import { searchParamsSchema } from '@/admin/components/elements/Table/lib/validations'
 import type { SearchParams } from '@/admin/components/elements/Table/types'
 import { Collections } from '@/convex/config'
@@ -14,7 +14,7 @@ export interface Props {
 const ListView: React.FC<Props> = async ({ searchParams, collection }) => {
   const search = searchParamsSchema.parse(searchParams)
 
-  const tasks = await getTasks(search, collection)
+  const tasks = await getDocuments(search, collection)
 
   return (
     // skipcq: JS-0415

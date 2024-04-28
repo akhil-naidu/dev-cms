@@ -18,7 +18,7 @@ import {
 import { Doc } from '@/convex/_generated/dataModel'
 import { Collections } from '@/convex/config'
 
-import { deleteTasks } from './lib/client-actions'
+import { deleteDocuments } from './lib/client-actions'
 
 interface DeleteDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
@@ -66,7 +66,7 @@ export function DeleteDialog({
               // skipcq: JS-0417
               onClick={() => {
                 startDeleteTransition(() => {
-                  deleteTasks({
+                  deleteDocuments({
                     rows,
                     onSuccess,
                   })

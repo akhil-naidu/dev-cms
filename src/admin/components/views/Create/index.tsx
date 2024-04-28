@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
 
-import { createTask } from '@/admin/components/elements/Table/lib/actions'
+import { createDocument } from '@/admin/components/elements/Table/lib/actions'
 import { CreateTaskSchema } from '@/admin/components/elements/Table/lib/validations'
 import { LoaderIcon } from '@/admin/components/icons'
 import AutoForm, { AutoFormSubmit } from '@/components/auto-form'
@@ -21,7 +21,7 @@ const Create: React.FC = () => {
   const handleCreate = (input: CreateTaskSchema) => {
     startCreateTransition(() => {
       toast.promise(
-        createTask({
+        createDocument({
           ...input,
         }),
         {

@@ -5,7 +5,7 @@ import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
 import { DeleteDialog } from '@/admin/components/elements/Table/delete-dialog'
-import { createTask } from '@/admin/components/elements/Table/lib/actions'
+import { createDocument } from '@/admin/components/elements/Table/lib/actions'
 import { CreateTaskSchema } from '@/admin/components/elements/Table/lib/validations'
 import {
   CheckIcon,
@@ -54,7 +54,7 @@ const EditHeader: React.FC<Props> = props => {
   const handleCreate = (input: CreateTaskSchema) => {
     startCreateTransition(() => {
       toast.promise(
-        createTask({
+        createDocument({
           ...input,
         }),
         {

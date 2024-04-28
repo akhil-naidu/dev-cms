@@ -37,7 +37,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Task_Schema } from '@/convex/task'
 import { getErrorMessage } from '@/utils/handle-error'
 
-import { createTask } from './lib/actions'
+import { createDocument } from './lib/actions'
 import { type CreateTaskSchema, createTaskSchema } from './lib/validations'
 
 export const CreateDialog = () => {
@@ -53,7 +53,7 @@ export const CreateDialog = () => {
   const onSubmit = (input: CreateTaskSchema) => {
     startCreateTransition(() => {
       toast.promise(
-        createTask({
+        createDocument({
           ...input,
         }),
         {

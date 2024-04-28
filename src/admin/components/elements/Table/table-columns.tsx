@@ -22,7 +22,7 @@ import { formatDate } from '@/utils/format-date'
 import { getErrorMessage } from '@/utils/handle-error'
 
 import { DeleteDialog } from './delete-dialog'
-import { createTask } from './lib/actions'
+import { createDocument } from './lib/actions'
 import { CreateTaskSchema } from './lib/validations'
 import { UpdateTaskSheet } from './update-task-sheet'
 
@@ -186,7 +186,7 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
         const handleCreate = (input: CreateTaskSchema) => {
           startCreateTransition(() => {
             toast.promise(
-              createTask({
+              createDocument({
                 ...input,
               }),
               {
@@ -259,7 +259,7 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
                           } = row.original
 
                           toast.promise(
-                            updateTask({
+                            updateDocument({
                               id: _id,
                               ...withoutSystemFields,
                               label: value as Doc<Collections>['label'],

@@ -9,7 +9,7 @@ import { Collections } from '@/convex/config'
 
 import { GetTasksSchema } from './validations'
 
-export async function getTask(input: {
+export async function getDocument(input: {
   id: Id<Collections>
   collection: Collections
 }) {
@@ -27,7 +27,10 @@ export async function getTask(input: {
   }
 }
 
-export async function getTasks(input: GetTasksSchema, collection: Collections) {
+export async function getDocuments(
+  input: GetTasksSchema,
+  collection: Collections,
+) {
   noStore()
   // skipcq: JS-0356
   const { page, per_page, sort, title, status, priority, operator, from, to } =

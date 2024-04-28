@@ -5,9 +5,9 @@ import { Doc } from '@/convex/_generated/dataModel'
 import { Collections } from '@/convex/config'
 import { getErrorMessage } from '@/utils/handle-error'
 
-import { createTask, deleteTask, updateTask } from './actions'
+import { createDocument, deleteDocument, updateDocument } from './actions'
 
-export function createTasks({
+export function createDocuments({
   rows,
   onSuccess,
 }: {
@@ -18,7 +18,7 @@ export function createTasks({
     Promise.all(
       rows.map(
         async row =>
-          await createTask({
+          await createDocument({
             ...row,
           }),
       ),
@@ -34,7 +34,7 @@ export function createTasks({
   )
 }
 
-export function deleteTasks({
+export function deleteDocuments({
   rows,
   onSuccess,
 }: {
@@ -45,7 +45,7 @@ export function deleteTasks({
     Promise.all(
       rows.map(
         async row =>
-          await deleteTask({
+          await deleteDocument({
             id: row._id,
           }),
       ),
@@ -61,7 +61,7 @@ export function deleteTasks({
   )
 }
 
-export function updateTasks({
+export function updateDocuments({
   rows,
   onSuccess,
 }: {
@@ -73,7 +73,7 @@ export function updateTasks({
       rows.map(async row => {
         const { _id, _creationTime, ...withoutSystemFields } = row
 
-        await updateTask({
+        await updateDocument({
           id: row._id,
           ...withoutSystemFields,
         })

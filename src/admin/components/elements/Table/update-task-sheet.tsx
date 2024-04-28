@@ -37,7 +37,7 @@ import { Collections } from '@/convex/config'
 import { Task_Schema } from '@/convex/task'
 import { getErrorMessage } from '@/utils/handle-error'
 
-import { updateTask } from './lib/actions'
+import { updateDocument } from './lib/actions'
 import { type UpdateTaskSchema, updateTaskSchema } from './lib/validations'
 
 interface UpdateTaskSheetProps
@@ -67,7 +67,7 @@ export function UpdateTaskSheet({
   function onSubmit(input: UpdateTaskSchema) {
     startUpdateTransition(() => {
       toast.promise(
-        updateTask({
+        updateDocument({
           id: task._id,
           ...input,
         }),

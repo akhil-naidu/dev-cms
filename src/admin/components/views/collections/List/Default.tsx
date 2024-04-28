@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 
 import { DataTableSkeleton } from '@/admin/components/data-table/data-table-skeleton'
 import { Shell } from '@/admin/components/elements/Shell'
-import { getTasks } from '@/admin/components/elements/Table/lib/queries'
+import { getDocuments } from '@/admin/components/elements/Table/lib/queries'
 import { searchParamsSchema } from '@/admin/components/elements/Table/lib/validations'
 import { Table } from '@/admin/components/elements/Table/table'
 import { TableProvider } from '@/admin/components/elements/Table/table-provider'
@@ -18,7 +18,7 @@ export interface Props {
 const DefaultList: React.FC<Props> = ({ searchParams, collection }) => {
   const search = searchParamsSchema.parse(searchParams)
 
-  const tasksPromise = getTasks(search, collection)
+  const tasksPromise = getDocuments(search, collection)
 
   return (
     <Shell className='gap-2'>
