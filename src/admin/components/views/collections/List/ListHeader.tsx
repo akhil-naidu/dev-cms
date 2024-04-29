@@ -17,11 +17,11 @@ import { Doc } from '@/convex/_generated/dataModel'
 import { Collections } from '@/convex/config'
 
 interface Props {
-  tasks: Doc<any>[]
+  documents: Doc<any>[]
 }
 
 const ListHeader: React.FC<Props> = props => {
-  const { tasks } = props
+  const { documents } = props
 
   const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
 
@@ -33,12 +33,12 @@ const ListHeader: React.FC<Props> = props => {
       <DeleteDialog
         open={showDeleteTaskDialog}
         onOpenChange={setShowDeleteTaskDialog}
-        rows={[...tasks] as Doc<Collections>[]}
+        rows={[...documents] as Doc<Collections>[]}
         showTrigger={false}
       />
       <div>
         <h2 className='text-2xl font-bold tracking-tight'>Tasks</h2>
-        <p className='text-muted-foreground'>Manage your tasks.</p>
+        <p className='text-muted-foreground'>Manage your documents.</p>
       </div>
       <div className='flex flex-row items-start h-full space-x-4'>
         <Link
@@ -65,7 +65,7 @@ const ListHeader: React.FC<Props> = props => {
             <DropdownMenuItem
               // skipcq: JS-0417
               onClick={() => {
-                const jsonString = JSON.stringify(tasks || 'empty data!')
+                const jsonString = JSON.stringify(documents || 'empty data!')
 
                 navigator.clipboard.writeText(jsonString).catch(error => {
                   console.error('Error copying object to clipboard:', error)

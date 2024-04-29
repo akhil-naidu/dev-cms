@@ -14,12 +14,12 @@ export interface Props {
 const ListView: React.FC<Props> = async ({ searchParams, collection }) => {
   const search = searchParamsSchema.parse(searchParams)
 
-  const tasks = await getDocuments(search, collection)
+  const documents = await getDocuments(search, collection)
 
   return (
     // skipcq: JS-0415
     <div className='h-full flex-1 flex-col space-y-8 p-8 md:flex'>
-      <ListHeader tasks={tasks.data} />
+      <ListHeader documents={documents.data} />
       <DefaultList searchParams={searchParams} collection={collection} />
     </div>
   )
