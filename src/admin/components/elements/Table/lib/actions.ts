@@ -10,14 +10,18 @@ import { Collections } from '@/convex/config'
 import { getErrorMessage } from '@/utils/handle-error'
 
 // skipcq: JS-0356
-export async function createDocument(
-  input: WithoutSystemFields<Doc<Collections>>,
-) {
+export async function createDocument({
+  doc,
+  collection,
+}: {
+  doc: WithoutSystemFields<Doc<Collections>>
+  collection: Collections
+}) {
   noStore()
 
   try {
-    const data = await fetchMutation(api.task.create, {
-      ...input,
+    const data = await fetchMutation(api[collection].create, {
+      ...doc,
     })
 
     revalidatePath('/')
@@ -35,17 +39,21 @@ export async function createDocument(
 }
 
 // skipcq: JS-0116, JS-0356
-export async function updateDocument(
-  input: WithoutSystemFields<Doc<Collections>> & { id: Id<Collections> },
-) {
+export async function updateDocument({
+  id,
+  collection,
+  doc,
+}: {
+  id: Id<Collections>
+  collection: Collections
+  doc: WithoutSystemFields<Doc<Collections>>
+}) {
   noStore()
 
-  const { id, ...newData } = input
-
   try {
-    const data = await fetchMutation(api.task.update, {
+    const data = await fetchMutation(api[collection].update, {
       id,
-      patch: { ...newData },
+      patch: { ...doc },
     })
 
     revalidatePath('/')
@@ -63,11 +71,15 @@ export async function updateDocument(
 }
 
 // skipcq: JS-0116, JS-0356
-export async function deleteDocument(input: { id: Id<Collections> }) {
-  const { id } = input
-
+export async function deleteDocument({
+  id,
+  collection,
+}: {
+  id: Id<Collections>
+  collection: Collections
+}) {
   try {
-    await fetchMutation(api.task.destroy, {
+    await fetchMutation(api[collection].destroy, {
       id,
     })
 

@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusIcon } from '@radix-ui/react-icons'
+import { WithoutSystemFields } from 'convex/server'
 import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -34,11 +35,13 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 import { Task_Schema } from '@/convex/task'
 import { getErrorMessage } from '@/utils/handle-error'
 
 import { createDocument } from './lib/actions'
-import { type CreateTaskSchema, createTaskSchema } from './lib/validations'
+import { createTaskSchema } from './lib/validations'
 
 export const CreateDialog = () => {
   const [open, setOpen] = useState(false)
@@ -46,11 +49,11 @@ export const CreateDialog = () => {
 
   const { label, priority, status } = Task_Schema
 
-  const form = useForm<CreateTaskSchema>({
+  const form = useForm<WithoutSystemFields<Doc<Collections>>>({
     resolver: zodResolver(createTaskSchema),
   })
 
-  const onSubmit = (input: CreateTaskSchema) => {
+  const onSubmit = (input: WithoutSystemFields<Doc<Collections>>) => {
     startCreateTransition(() => {
       toast.promise(
         createDocument({

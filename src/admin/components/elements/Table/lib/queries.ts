@@ -7,7 +7,7 @@ import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { Collections } from '@/convex/config'
 
-import { GetTasksSchema } from './validations'
+import { GetDocumentsSchema } from './validations'
 
 export async function getDocument(input: {
   id: Id<Collections>
@@ -28,7 +28,7 @@ export async function getDocument(input: {
 }
 
 export async function getDocuments(
-  input: GetTasksSchema,
+  input: GetDocumentsSchema,
   collection: Collections,
 ) {
   noStore()
@@ -37,7 +37,6 @@ export async function getDocuments(
     input
 
   try {
-    // const data = (await tasksData) as Doc<Collections>[]
     const data = await fetchQuery(api[collection].paginate, {
       paginationOpts: {
         numItems: per_page,
@@ -50,21 +49,3 @@ export async function getDocuments(
     return { data: [], pageCount: 0 }
   }
 }
-
-// export async function getTaskCountByStatus() {
-//   noStore()
-//   try {
-//     return await tasksData.length
-//   } catch (err) {
-//     return []
-//   }
-// }
-
-// export async function getTaskCountByPriority() {
-//   noStore()
-//   try {
-//     return await tasksData.length
-//   } catch (err) {
-//     return []
-//   }
-// }

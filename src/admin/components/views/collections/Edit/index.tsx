@@ -13,11 +13,11 @@ interface Props {
 const EditView: React.FC<Props> = async props => {
   const { id, collection } = props
 
-  const taskData = await getDocument({ collection, id })
+  const documentData = await getDocument({ collection, id })
 
-  return taskData.data ? (
+  return documentData.data ? (
     <DefaultEdit
-      task={taskData?.data as Doc<Collections>}
+      document={documentData?.data as Doc<Collections>}
       collection={collection}
     />
   ) : (

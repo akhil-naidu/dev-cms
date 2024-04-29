@@ -19,7 +19,7 @@ const ListView: React.FC<Props> = async ({ searchParams, collection }) => {
   return (
     // skipcq: JS-0415
     <div className='h-full flex-1 flex-col space-y-8 p-8 md:flex'>
-      <ListHeader documents={documents.data} />
+      <ListHeader documents={documents.data} collection={collection} />
       <DefaultList searchParams={searchParams} collection={collection} />
     </div>
   )

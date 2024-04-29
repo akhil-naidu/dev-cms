@@ -1,13 +1,16 @@
 'use client'
 
+import { WithoutSystemFields } from 'convex/server'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
 
 import { createDocument } from '@/admin/components/elements/Table/lib/actions'
-import { CreateTaskSchema } from '@/admin/components/elements/Table/lib/validations'
 import { LoaderIcon } from '@/admin/components/icons'
+import { useRouterParams } from '@/admin/hooks/use-router-params'
 import AutoForm, { AutoFormSubmit } from '@/components/auto-form'
+import { Doc } from '@/convex/_generated/dataModel'
+import { Collections } from '@/convex/config'
 import { Task_Zod_Object } from '@/convex/task'
 import { getErrorMessage } from '@/utils/handle-error'
 
@@ -18,11 +21,14 @@ const Create: React.FC = () => {
 
   const [isCreatePending, startCreateTransition] = useTransition()
 
-  const handleCreate = (input: CreateTaskSchema) => {
+  const { collection } = useRouterParams()
+
+  const handleCreate = (input: WithoutSystemFields<Doc<Collections>>) => {
     startCreateTransition(() => {
       toast.promise(
         createDocument({
-          ...input,
+          collection,
+          doc: { ...input },
         }),
         {
           loading: 'Creating task...',

@@ -29,7 +29,7 @@ export function Table({ tasksPromise, collection }: TableProps) {
   const { data, pageCount } = use(tasksPromise)
 
   // Memoize the columns so they don't re-render on every render
-  const columns = useMemo(() => getColumns(collection), [])
+  const columns = useMemo(() => getColumns(collection), [collection])
 
   /**
    * This component can render either a faceted filter or a search filter based on the `options` prop.
@@ -42,7 +42,7 @@ export function Table({ tasksPromise, collection }: TableProps) {
    * @prop {React.ReactNode} [icon] - An optional icon to display next to the label.
    * @prop {boolean} [withCount] - An optional boolean to display the count of the filter option.
    */
-  const filterFields: DataTableFilterField<Doc<any>>[] = [
+  const filterFields: DataTableFilterField<Doc<Collections>>[] = [
     {
       label: 'Title',
       value: 'title',
@@ -58,7 +58,7 @@ export function Table({ tasksPromise, collection }: TableProps) {
     filterFields,
     enableAdvancedFilter: featureFlags.includes('advancedFilter'),
     defaultPerPage: 10,
-    // defaultSort: 'createdAt.desc',
+    defaultSort: '_creationTime.desc',
   })
 
   return (

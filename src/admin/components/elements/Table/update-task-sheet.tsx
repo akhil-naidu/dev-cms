@@ -5,6 +5,7 @@ import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
+import { useRouterParams } from '@/admin/hooks/use-router-params'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -54,6 +55,8 @@ export function UpdateTaskSheet({
 
   const tasks = Task_Schema
 
+  const { collection } = useRouterParams()
+
   const form = useForm<UpdateTaskSchema>({
     resolver: zodResolver(updateTaskSchema),
     defaultValues: {
@@ -69,7 +72,8 @@ export function UpdateTaskSheet({
       toast.promise(
         updateDocument({
           id: task._id,
-          ...input,
+          collection,
+          doc: { ...input },
         }),
         {
           loading: 'Updating task...',

@@ -14,9 +14,7 @@ export const searchParamsSchema = z.object({
   operator: z.enum(['and', 'or']).optional(),
 })
 
-export const getTasksSchema = searchParamsSchema
-
-export type GetTasksSchema = z.infer<typeof getTasksSchema>
+export type GetDocumentsSchema = z.infer<typeof searchParamsSchema>
 
 export const createTaskSchema = z.object({
   ...Task_Schema,

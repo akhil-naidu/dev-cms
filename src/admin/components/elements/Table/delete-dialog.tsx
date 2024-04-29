@@ -4,6 +4,7 @@ import { LoaderIcon } from '../../icons'
 import { TrashIcon } from '@radix-ui/react-icons'
 import { useTransition } from 'react'
 
+import { useRouterParams } from '@/admin/hooks/use-router-params'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -35,6 +36,8 @@ export function DeleteDialog({
 }: DeleteDialogProps) {
   const [isDeletePending, startDeleteTransition] = useTransition()
 
+  const { collection } = useRouterParams()
+
   return (
     // skipcq: JS-0415
     <Dialog {...props}>
@@ -52,7 +55,8 @@ export function DeleteDialog({
           <DialogDescription>
             This action cannot be undone. This will permanently delete your{' '}
             <span className='font-medium'>{rows.length}</span>
-            {rows.length === 1 ? ' task' : ' rows'} from our servers.
+            {rows.length === 1 ? ` ${collection}` : ` ${collection}s`} from our
+            servers.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className='gap-2 sm:space-x-0'>

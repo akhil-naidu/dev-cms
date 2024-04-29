@@ -17,11 +17,12 @@ import { Doc } from '@/convex/_generated/dataModel'
 import { Collections } from '@/convex/config'
 
 interface Props {
-  documents: Doc<any>[]
+  documents: Doc<Collections>[]
+  collection: string
 }
 
 const ListHeader: React.FC<Props> = props => {
-  const { documents } = props
+  const { documents, collection } = props
 
   const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
 
@@ -37,7 +38,9 @@ const ListHeader: React.FC<Props> = props => {
         showTrigger={false}
       />
       <div>
-        <h2 className='text-2xl font-bold tracking-tight'>Tasks</h2>
+        <h2 className='text-2xl font-bold tracking-tight capitalize'>
+          {`${collection}s`}
+        </h2>
         <p className='text-muted-foreground'>Manage your documents.</p>
       </div>
       <div className='flex flex-row items-start h-full space-x-4'>

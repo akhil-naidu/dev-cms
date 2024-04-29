@@ -1,11 +1,11 @@
 'use client'
 
+import { WithoutSystemFields } from 'convex/server'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { updateDocument } from '@/admin/components/elements/Table/lib/actions'
-import { type UpdateTaskSchema } from '@/admin/components/elements/Table/lib/validations'
 import { LoaderIcon } from '@/admin/components/icons'
 import AutoForm, { AutoFormSubmit } from '@/components/auto-form'
 import { Doc, Id } from '@/convex/_generated/dataModel'
@@ -15,26 +15,25 @@ import { getErrorMessage } from '@/utils/handle-error'
 import EditHeader from './EditHeader'
 
 interface Props {
-  task?: Doc<Collections>
+  document?: Doc<Collections>
   collection: Collections
 }
 
-const DefaultEdit: React.FC<Props> = ({ task, collection }) => {
+const DefaultEdit: React.FC<Props> = ({ document, collection }) => {
   const [isUpdatePending, startUpdateTransition] = useTransition()
 
-  console.log('dfe', collection)
-
-  const handleUpdate = (input: UpdateTaskSchema) => {
+  const handleUpdate = (input: WithoutSystemFields<Doc<Collections>>) => {
     startUpdateTransition(() => {
       toast.promise(
         updateDocument({
-          id: task?._id as Id<Collections>,
-          ...input,
+          id: document?._id as Id<Collections>,
+          collection,
+          doc: { ...input },
         }),
         {
-          loading: 'Updating task...',
+          loading: `Updating ${collection}...`,
           success: () => {
-            return 'Task updated'
+            return `${collection.charAt(0).toUpperCase() + collection.slice(1)} updated`
           },
           error: error => {
             return getErrorMessage(error)
@@ -50,14 +49,14 @@ const DefaultEdit: React.FC<Props> = ({ task, collection }) => {
   return (
     // skipcq: JS-0415
     <div className='space-y-6 p-10 pb-16 md:block'>
-      <EditHeader task={task} />
+      <EditHeader document={document} />
       <div className='flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0'>
         <div className='flex-1 w-full'>
           <div className='space-y-6'>
-            {/* <EditForm task={task} /> */}
+            {/* <EditForm document={document} /> */}
             <AutoForm
               formSchema={dynamicZodObject}
-              values={task}
+              values={document}
               // skipcq: JS-0417
               onSubmit={handleUpdate}>
               <AutoFormSubmit>

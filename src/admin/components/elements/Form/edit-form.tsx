@@ -3,6 +3,7 @@
 import { LoaderIcon } from '../../icons'
 import { createDocument } from '../Table/lib/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { WithoutSystemFields } from 'convex/server'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,10 +11,10 @@ import { toast } from 'sonner'
 
 import { updateDocument } from '@/admin/components/elements/Table/lib/actions'
 import {
-  CreateTaskSchema,
   type UpdateTaskSchema,
   updateTaskSchema,
 } from '@/admin/components/elements/Table/lib/validations'
+import { useRouterParams } from '@/admin/hooks/use-router-params'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -49,6 +50,8 @@ export function EditForm({ task }: Props) {
 
   const pathname = usePathname()
 
+  const { collection } = useRouterParams()
+
   const router = useRouter()
 
   const isCreatePage = pathname.split('/').pop() === 'create'
@@ -57,12 +60,13 @@ export function EditForm({ task }: Props) {
     resolver: zodResolver(updateTaskSchema),
   })
 
-  const handleUpdate = (input: UpdateTaskSchema) => {
+  const handleUpdate = (input: WithoutSystemFields<Doc<Collections>>) => {
     startUpdateTransition(() => {
       toast.promise(
         updateDocument({
           id: task?._id as Id<Collections>,
-          ...input,
+          collection,
+          doc: { ...input },
         }),
         {
           loading: 'Updating task...',
@@ -77,11 +81,12 @@ export function EditForm({ task }: Props) {
     })
   }
 
-  function handleCreate(input: CreateTaskSchema) {
+  function handleCreate(input: WithoutSystemFields<Doc<Collections>>) {
     startCreateTransition(() => {
       toast.promise(
         createDocument({
-          ...input,
+          collection,
+          doc: { ...input },
         }),
         {
           loading: 'Creating task...',

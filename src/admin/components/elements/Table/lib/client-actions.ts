@@ -9,9 +9,11 @@ import { createDocument, deleteDocument, updateDocument } from './actions'
 
 export function createDocuments({
   rows,
+  collection,
   onSuccess,
 }: {
   rows: WithoutSystemFields<Doc<Collections>>[]
+  collection: Collections
   onSuccess?: () => void
 }) {
   toast.promise(
@@ -19,15 +21,16 @@ export function createDocuments({
       rows.map(
         async row =>
           await createDocument({
-            ...row,
+            collection,
+            doc: { ...row },
           }),
       ),
     ),
     {
-      loading: 'Creating...',
+      loading: `Creating ${collection}s...`,
       success: () => {
         onSuccess?.()
-        return 'Tasks created'
+        return `${collection.charAt(0).toUpperCase()}${collection.slice(1)}s created`
       },
       error: err => getErrorMessage(err),
     },
@@ -36,9 +39,11 @@ export function createDocuments({
 
 export function deleteDocuments({
   rows,
+  collection,
   onSuccess,
 }: {
   rows: Doc<Collections>[]
+  collection: Collections
   onSuccess?: () => void
 }) {
   toast.promise(
@@ -47,14 +52,15 @@ export function deleteDocuments({
         async row =>
           await deleteDocument({
             id: row._id,
+            collection,
           }),
       ),
     ),
     {
-      loading: 'Deleting...',
+      loading: `Deleting ${collection}s...`,
       success: () => {
         onSuccess?.()
-        return 'Tasks deleted'
+        return `${collection.charAt(0).toUpperCase()}${collection.slice(1)}s deleted`
       },
       error: err => getErrorMessage(err),
     },
@@ -63,9 +69,11 @@ export function deleteDocuments({
 
 export function updateDocuments({
   rows,
+  collection,
   onSuccess,
 }: {
   rows: Doc<Collections>[]
+  collection: Collections
   onSuccess?: () => void
 }) {
   toast.promise(
@@ -75,15 +83,16 @@ export function updateDocuments({
 
         await updateDocument({
           id: row._id,
-          ...withoutSystemFields,
+          collection,
+          doc: { ...withoutSystemFields },
         })
       }),
     ),
     {
-      loading: 'Updating...',
+      loading: `Updating ${collection}s...`,
       success: () => {
         onSuccess?.()
-        return 'Tasks updated'
+        return `${collection.charAt(0).toUpperCase() + collection.slice(1)} updated`
       },
       error: err => getErrorMessage(err),
     },

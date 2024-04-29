@@ -1,18 +1,19 @@
 'use client'
 
+import { WithoutSystemFields } from 'convex/server'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
 import { DeleteDialog } from '@/admin/components/elements/Table/delete-dialog'
 import { createDocument } from '@/admin/components/elements/Table/lib/actions'
-import { CreateTaskSchema } from '@/admin/components/elements/Table/lib/validations'
 import {
   CheckIcon,
   ChevronLeftIcon,
   CopyIcon,
   MoreVerticalIcon,
 } from '@/admin/components/icons'
+import { useRouterParams } from '@/admin/hooks/use-router-params'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -27,17 +28,19 @@ import { formatDate } from '@/utils/format-date'
 import { getErrorMessage } from '@/utils/handle-error'
 
 interface Props {
-  task?: Doc<Collections>
+  document?: Doc<Collections>
 }
 
 const EditHeader: React.FC<Props> = props => {
-  const { task } = props
+  const { document } = props
 
   const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
   const [copied, setCopied] = useState(false)
   const [_, startCreateTransition] = useTransition()
 
   const router = useRouter()
+
+  const { collection } = useRouterParams()
 
   const onSuccess = () => {
     router.push('./')
@@ -51,14 +54,15 @@ const EditHeader: React.FC<Props> = props => {
     return () => clearTimeout(timeout)
   }, [copied])
 
-  const handleCreate = (input: CreateTaskSchema) => {
+  const handleCreate = (input: WithoutSystemFields<Doc<Collections>>) => {
     startCreateTransition(() => {
       toast.promise(
         createDocument({
-          ...input,
+          collection,
+          doc: { ...input },
         }),
         {
-          loading: 'Creating task...',
+          loading: 'Creating document...',
           success: data => {
             router.push(data?.data?._id || './')
             return 'Task created'
@@ -78,7 +82,7 @@ const EditHeader: React.FC<Props> = props => {
         <DeleteDialog
           open={showDeleteTaskDialog}
           onOpenChange={setShowDeleteTaskDialog}
-          rows={[task] as Doc<Collections>[]}
+          rows={[document] as Doc<Collections>[]}
           showTrigger={false}
           // skipcq: JS-0417
           onSuccess={onSuccess}
@@ -93,7 +97,7 @@ const EditHeader: React.FC<Props> = props => {
           <span className='sr-only'>Back</span>
         </Button>
         <h1 className='group flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0'>
-          {task?._id}
+          {document?._id}
           <Button
             className={`h-6 w-6 ${copied ? '' : 'opacity-0'} transition-opacity group-hover:opacity-100 ml-2 duration-300 ease-in-out`}
             size='icon'
@@ -101,7 +105,7 @@ const EditHeader: React.FC<Props> = props => {
             // skipcq: JS-0417
             onClick={() => {
               navigator.clipboard
-                .writeText(task?._id || 'empty data!')
+                .writeText(document?._id || 'empty data!')
                 .catch(error => {
                   console.error('Error copying object to clipboard:', error)
                 })
@@ -139,20 +143,21 @@ const EditHeader: React.FC<Props> = props => {
                 onClick={() => setShowDeleteTaskDialog(true)}>
                 Delete
               </DropdownMenuItem>
-              {/* <DropdownMenuItem
-                // skipcq: JS-0417
-                onClick={() => {
-                  if (!task) return
-
-                  const { _id, _creationTime, ...withoutSystemFileds } = task
-                  handleCreate({ ...withoutSystemFileds })
-                }}>
-                Duplicate
-              </DropdownMenuItem> */}
               <DropdownMenuItem
                 // skipcq: JS-0417
                 onClick={() => {
-                  const jsonString = JSON.stringify(task || 'empty data!')
+                  if (!document) return
+
+                  const { _id, _creationTime, ...withoutSystemFileds } =
+                    document
+                  handleCreate({ ...withoutSystemFileds })
+                }}>
+                Duplicate
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                // skipcq: JS-0417
+                onClick={() => {
+                  const jsonString = JSON.stringify(document || 'empty data!')
 
                   navigator.clipboard.writeText(jsonString).catch(error => {
                     console.error('Error copying object to clipboard:', error)
@@ -168,7 +173,8 @@ const EditHeader: React.FC<Props> = props => {
       <div className='grid'>
         <h2 className='text-md tracking-tight font-extrabold'>Created At</h2>
         <p className='text-xs text-gray-500 dark:text-gray-400'>
-          {task?._creationTime && formatDate(Number(task?._creationTime))}
+          {document?._creationTime &&
+            formatDate(Number(document?._creationTime))}
         </p>
       </div>
       <Separator />

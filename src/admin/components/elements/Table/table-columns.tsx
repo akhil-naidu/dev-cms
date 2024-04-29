@@ -2,6 +2,8 @@
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { type ColumnDef } from '@tanstack/react-table'
+import { WithoutSystemFields } from 'convex/server'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
@@ -23,25 +25,25 @@ import { getErrorMessage } from '@/utils/handle-error'
 
 import { DeleteDialog } from './delete-dialog'
 import { createDocument } from './lib/actions'
-import { CreateTaskSchema } from './lib/validations'
-import { UpdateTaskSheet } from './update-task-sheet'
 
-export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
-  // const tasks = OrderSchema
-  const tasks = tableConfig[collection]
+export function getColumns(
+  collection: Collections,
+): ColumnDef<Doc<Collections>>[] {
+  // const tableSchema = OrderSchema
+  const tableSchema = tableConfig[collection]
 
-  const columnsArray = Object.entries(tasks).map(([name, types]) => {
+  const columnsArray: ColumnDef<Doc<Collections>>[] = Object.entries(
+    tableSchema,
+  ).map(([name, _]) => {
     return {
       accessorKey: name,
-      // TODO: fix this type issue
-      header: ({ column }: any) => (
+      header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
           title={name.charAt(0).toUpperCase() + name.slice(1)}
         />
       ),
-      // TODO: fix this type issue
-      cell: ({ row }: any) => {
+      cell: ({ row }) => {
         return (
           <div className='flex space-x-2'>
             <span className='max-w-[20.25rem] truncate font-medium'>
@@ -98,7 +100,7 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
     //     <DataTableColumnHeader column={column} title='Title' />
     //   ),
     //   cell: ({ row }) => {
-    //     const label = Object.values(tasks.label.unwrap().enum).find(
+    //     const label = Object.values(tableSchema.label.unwrap().enum).find(
     //       label => label === row.original.label,
     //     )
 
@@ -118,7 +120,7 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
     //     <DataTableColumnHeader column={column} title='Status' />
     //   ),
     //   cell: ({ row }) => {
-    //     const status = Object.values(tasks.status.enum).find(
+    //     const status = Object.values(tableSchema.status.enum).find(
     //       status => status === row.original.status,
     //     )
 
@@ -146,7 +148,7 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
     //     <DataTableColumnHeader column={column} title='Priority' />
     //   ),
     //   cell: ({ row }) => {
-    //     const priority = Object.values(tasks.priority.unwrap().enum).find(
+    //     const priority = Object.values(tableSchema.priority.unwrap().enum).find(
     //       priority => priority === row.original.priority,
     //     )
 
@@ -178,21 +180,25 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
     {
       id: 'actions',
       cell: function Cell({ row }) {
-        // const [isUpdatePending, startUpdateTransition] = useTransition()
-        const [showUpdateTaskSheet, setShowUpdateTaskSheet] = useState(false)
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
+        const [showDeleteDialog, setShowDeleteDialog] = useState(false)
         const [_, startCreateTransition] = useTransition()
 
-        const handleCreate = (input: CreateTaskSchema) => {
+        const router = useRouter()
+        const pathname = usePathname()
+
+        const handleCreate = (input: WithoutSystemFields<Doc<Collections>>) => {
           startCreateTransition(() => {
             toast.promise(
               createDocument({
-                ...input,
+                doc: {
+                  ...input,
+                },
+                collection,
               }),
               {
-                loading: 'Creating task...',
+                loading: `Creating ${collection}...`,
                 success: () => {
-                  return 'Task created'
+                  return `${collection.charAt(0).toUpperCase() + collection.slice(1)} created`
                 },
                 error: error => {
                   return getErrorMessage(error)
@@ -205,14 +211,9 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
         return (
           // skipcq: JS-0415
           <>
-            <UpdateTaskSheet
-              open={showUpdateTaskSheet}
-              onOpenChange={setShowUpdateTaskSheet}
-              task={row.original}
-            />
             <DeleteDialog
-              open={showDeleteTaskDialog}
-              onOpenChange={setShowDeleteTaskDialog}
+              open={showDeleteDialog}
+              onOpenChange={setShowDeleteDialog}
               rows={[row.original]}
               showTrigger={false}
             />
@@ -228,7 +229,9 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
               <DropdownMenuContent align='end' className='w-40'>
                 <DropdownMenuItem
                   // skipcq: JS-0417
-                  onSelect={() => setShowUpdateTaskSheet(true)}>
+                  onSelect={() => {
+                    router.push(`${pathname}/${row.getValue('_id')}`)
+                  }}>
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -272,7 +275,7 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
                           )
                         })
                       }}>
-                      {Object.values(tasks.label.unwrap().enum).map(label => (
+                      {Object.values(tableSchema.label.unwrap().enum).map(label => (
                         <DropdownMenuRadioItem
                           key={label}
                           value={label}
@@ -287,7 +290,7 @@ export function getColumns(collection: Collections): ColumnDef<Doc<any>>[] {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   // skipcq: JS-0417
-                  onSelect={() => setShowDeleteTaskDialog(true)}>
+                  onSelect={() => setShowDeleteDialog(true)}>
                   Delete
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
